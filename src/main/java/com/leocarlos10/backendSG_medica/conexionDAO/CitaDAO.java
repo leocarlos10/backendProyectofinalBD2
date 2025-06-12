@@ -16,12 +16,8 @@ import java.util.List;
 @Repository
 public class CitaDAO implements DAO<Cita> {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public CitaDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+     @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public List<Cita> get(String entity) {
