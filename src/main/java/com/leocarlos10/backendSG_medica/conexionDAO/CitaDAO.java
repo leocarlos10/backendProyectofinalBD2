@@ -1,67 +1,78 @@
 package com.leocarlos10.backendSG_medica.conexionDAO;
 
-import com.leocarlos10.backendSG_medica.modelo.Cita;
-
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import com.leocarlos10.backendSG_medica.Models.Cita;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-@Repository
 public class CitaDAO implements DAO<Cita> {
-
-    private final JdbcTemplate jdbcTemplate;
-
+    
     @Autowired
-    public CitaDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
+    
+    private static final class CitaRowMapper implements RowMapper<Cita> {
+        @Override
+        public Cita mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Cita cita = new Cita();
+            cita.setId_cita(rs.getInt("id_cita"));
+            cita.setFechaHora(rs.getTimestamp("fechaHora").toLocalDateTime());
+            cita.setEstado(rs.getString("estado"));
+            cita.setMotivoC(rs.getString("motivoC"));
+            cita.setRemitente(rs.getString("remitente"));
+            cita.setFechaU_Valoracion(rs.getDate("fechaU_Valoracion").toLocalDate());
+            cita.setCedula_usuario(rs.getString("cedula_usuario"));
+            cita.setTipo_cita(rs.getString("tipo_cita"));
+            return cita;
+        }
     }
 
     @Override
-    public List<Cita> get(String entity) {
-        return null;
+    public int registrar(Cita cita) throws SQLException {
+        String sql = "INSERT INTO cita (fechaHora, estado, motivoC, remitente, fechaU_Valoracion, cedula_usuario, tipo_cita) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        return jdbcTemplate.update(sql, 
+            cita.getFechaHora(),
+            cita.getEstado(),
+            cita.getMotivoC(),
+            cita.getRemitente(),
+            cita.getFechaU_Valoracion(),
+            cita.getCedula_usuario(),
+            cita.getTipo_cita()
+        );
     }
 
     @Override
-    public List<Cita> getAll() {
+    public List<Cita> obtenerTodo() throws SQLException {
         String sql = "SELECT * FROM cita";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Cita.class));
+        return jdbcTemplate.query(sql, new CitaRowMapper());
     }
 
     @Override
-    public boolean eliminar(Long id) {
-        String sql = "DELETE FROM cita WHERE idCita = ?";
-        try {
-            int rowsAffected = jdbcTemplate.update(sql, id);
-            return rowsAffected > 0;  // Retorna true si la cita fue eliminada
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;  // Retorna false si ocurrió un error
-        }   
-    }
-    // el metodo guarda la cita y devuelve el id de esa misma cita para usarlo en el frontend
-    @Override
-    public int registrar(Cita cita) {
-
-        String sql = "INSERT INTO cita (servicio, fechahora) VALUES (?, ?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, cita.getServicio());
-            ps.setObject(2, cita.getFechahora());
-            return ps;
-        }, keyHolder);
-        return keyHolder.getKey().intValue(); // Devuelve el ID generado
+    public Cita obtenerPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM cita WHERE id_cita = ?";
+        return jdbcTemplate.queryForObject(sql, new CitaRowMapper(), id);
     }
 
     @Override
-    public void actualizar(Cita entidad) {
+    public int actualizar(Cita cita) throws SQLException {
+        String sql = "UPDATE cita SET fechaHora = ?, estado = ?, motivoC = ?, remitente = ?, fechaU_Valoracion = ?, cedula_usuario = ?, tipo_cita = ? WHERE id_cita = ?";
+        return jdbcTemplate.update(sql,
+            cita.getFechaHora(),
+            cita.getEstado(),
+            cita.getMotivoC(),
+            cita.getRemitente(),
+            cita.getFechaU_Valoracion(),
+            cita.getCedula_usuario(),
+            cita.getTipo_cita(),
+            cita.getId_cita()
+        );
+    }
 
+    @Override
+    public int eliminar(int id) throws SQLException {
+        String sql = "DELETE FROM cita WHERE id_cita = ?";
+        return jdbcTemplate.update(sql, id);
     }
 }
