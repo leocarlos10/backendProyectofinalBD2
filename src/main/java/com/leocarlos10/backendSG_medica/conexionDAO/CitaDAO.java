@@ -2,14 +2,18 @@ package com.leocarlos10.backendSG_medica.conexionDAO;
 
 import com.leocarlos10.backendSG_medica.Models.Cita;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+@Repository
+@Transactional
 public class CitaDAO implements DAO<Cita> {
-    
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
     
@@ -75,4 +79,5 @@ public class CitaDAO implements DAO<Cita> {
         String sql = "DELETE FROM cita WHERE id_cita = ?";
         return jdbcTemplate.update(sql, id);
     }
+    
 }
