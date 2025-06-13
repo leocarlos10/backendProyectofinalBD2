@@ -10,6 +10,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component; 
 import com.leocarlos10.backendSG_medica.Models.CitasPanel;
+import com.leocarlos10.backendSG_medica.Models.Diagnostico;
+import com.leocarlos10.backendSG_medica.Models.DiagnosticoPanel;
+import com.leocarlos10.backendSG_medica.Models.Usuario;
 
 @Component
 public class PanelDAO {
@@ -34,6 +37,28 @@ public class PanelDAO {
         }
             
 }
+
+private static final class DiagnosticoPanelRowMapper implements RowMapper<DiagnosticoPanel> {
+        @Override
+        public DiagnosticoPanel mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Diagnostico diagnostico = new Diagnostico();
+        diagnostico.setId_diagnostico(rs.getInt("id_diagnostico"));
+        diagnostico.setTratamiento(rs.getString("tratamiento"));
+        diagnostico.setObservaciones(rs.getString("observaciones"));
+        diagnostico.setNota_corta(rs.getString("nota_corta"));
+        diagnostico.setNota_larga(rs.getString("nota_larga"));
+        diagnostico.setFecha(rs.getDate("fecha").toLocalDate());
+
+        Usuario usuario = new Usuario();
+        usuario.setNombre(rs.getString("nombre"));
+        usuario.setApellido(rs.getString("apellido"));
+        usuario.setCedula(rs.getString("cedula_usuario"));
+
+        return new DiagnosticoPanel(diagnostico, usuario);
+    }
+        
+    }
+
     public List<CitasPanel> obtenerCitasProximas() {
         String sql = "CALL citas_proximas()";
         return jdbcTemplate.query(sql, new CitasRowMapper());
@@ -42,6 +67,11 @@ public class PanelDAO {
     public List<CitasPanel> obtenerHoy() {
         String sql = "CALL citas_hoy()";
         return jdbcTemplate.query(sql, new CitasRowMapper());
+    }
+
+    public List<DiagnosticoPanel> obtenerDiagnosticos() {
+        String sql = "CALL diagnosticos_recientes";
+        return jdbcTemplate.query(sql, new DiagnosticoPanelRowMapper());
     }
 
 }
