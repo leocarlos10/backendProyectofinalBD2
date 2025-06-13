@@ -10,6 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * @Repository: Indica que esta clase es un repositorio de Spring
+ * @Transactional: Indica que esta clase es transaccional,
+ * Garantiza que las operaciones de base de datos sean atómicas y consistentes, 
+ * manejando automáticamente las transacciones.
+ */
+
 @Repository
 @Transactional
 public class CursoDAO implements DAO<Curso> {

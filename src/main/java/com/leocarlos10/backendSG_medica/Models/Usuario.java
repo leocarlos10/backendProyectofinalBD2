@@ -1,5 +1,7 @@
 package com.leocarlos10.backendSG_medica.Models;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,4 +17,5 @@ public class Usuario {
     private String telefono;
     private String ciudad;
     private String pass;
+    private LocalDate fechaNacimiento;
 } 

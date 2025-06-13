@@ -10,6 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * @Repository: Indica que esta clase es un repositorio de Spring
+ * @Transactional: Indica que esta clase es transaccional,
+ * Garantiza que las operaciones de base de datos sean atómicas y consistentes, 
+ * manejando automáticamente las transacciones.
+ */
+
 @Repository
 @Transactional
 public class UsuarioDAO implements DAO<Usuario> {
@@ -28,13 +35,14 @@ public class UsuarioDAO implements DAO<Usuario> {
             usuario.setTelefono(rs.getString("telefono"));
             usuario.setCiudad(rs.getString("ciudad"));
             usuario.setPass(rs.getString("pass"));
+            usuario.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
             return usuario;
         }
     }
 
     @Override
     public int registrar(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO usuario (cedula, nombre, apellido, correo, telefono, ciudad, pass) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO usuario (cedula, nombre, apellido, correo, telefono, ciudad, pass, fechaNacimiento) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql, 
             usuario.getCedula(),
             usuario.getNombre(),
@@ -42,7 +50,8 @@ public class UsuarioDAO implements DAO<Usuario> {
             usuario.getCorreo(),
             usuario.getTelefono(),
             usuario.getCiudad(),
-            usuario.getPass()
+            usuario.getPass(),
+            usuario.getFechaNacimiento()
         );
     }
 
