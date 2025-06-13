@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -39,5 +41,11 @@ public class TestController {
     public List<CitasPanel> obtenerCitasProximas() {
         return panelDAO.obtenerCitasProximas();
     }
+
+    @GetMapping("/citas-hoy")
+    public List<CitasPanel> obtenerCitasHoy() {
+        return panelDAO.obtenerHoy();
+    }
+    
 
 }

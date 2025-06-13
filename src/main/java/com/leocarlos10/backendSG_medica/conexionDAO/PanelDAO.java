@@ -39,4 +39,9 @@ public class PanelDAO {
         return jdbcTemplate.query(sql, new CitasRowMapper());
     }
 
+    public List<CitasPanel> obtenerHoy() {
+        String sql = "CALL citas_hoy()";
+        return jdbcTemplate.query(sql, new CitasRowMapper());
+    }
+
 }
