@@ -2,12 +2,14 @@ package com.leocarlos10.backendSG_medica.conexionDAO;
 
 import com.leocarlos10.backendSG_medica.Models.Usuario;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+@Component
 public class UsuarioDAO implements DAO<Usuario> {
     
     @Autowired
