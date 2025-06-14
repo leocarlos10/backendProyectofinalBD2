@@ -18,4 +18,5 @@ public class Cita {
     private LocalDate fechaU_Valoracion;
     private String cedula_usuario;
     private String tipo_cita;
+    private String servicio;
 } 

@@ -39,6 +39,7 @@ public class CitaDAO implements DAO<Cita,Integer> {
             cita.setFechaU_Valoracion(rs.getDate("fechaU_Valoracion").toLocalDate());
             cita.setCedula_usuario(rs.getString("cedula_usuario"));
             cita.setTipo_cita(rs.getString("tipo_cita"));
+            cita.setServicio(rs.getString("servicio"));
             return cita;
         }
     }
@@ -54,7 +55,8 @@ public class CitaDAO implements DAO<Cita,Integer> {
                 rs.getString("remitente"),
                 rs.getDate("fechaU_Valoracion").toLocalDate(),
                 rs.getString("cedula"),
-                rs.getString("tipo_cita")
+                rs.getString("tipo_cita"),
+                rs.getString("servicio")
             );
             Usuario usuario = new Usuario(
                 rs.getString("cedula"),
@@ -77,7 +79,7 @@ public class CitaDAO implements DAO<Cita,Integer> {
 
     @Override
     public int registrar(Cita cita) throws SQLException {
-        String sql = "INSERT INTO cita (fechaHora, estado, motivoC, remitente, fechaU_Valoracion, cedula_usuario, tipo_cita) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cita (fechaHora, estado, motivoC, remitente, fechaU_Valoracion, cedula_usuario, tipo_cita, servicio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql, 
             cita.getFechaHora(),
             cita.getEstado(),
@@ -85,7 +87,8 @@ public class CitaDAO implements DAO<Cita,Integer> {
             cita.getRemitente(),
             cita.getFechaU_Valoracion(),
             cita.getCedula_usuario(),
-            cita.getTipo_cita()
+            cita.getTipo_cita(),
+            cita.getServicio()
         );
     }
 
@@ -109,7 +112,7 @@ public class CitaDAO implements DAO<Cita,Integer> {
 
     @Override
     public int actualizar(Cita cita) throws SQLException {
-        String sql = "UPDATE cita SET fechaHora = ?, estado = ?, motivoC = ?, remitente = ?, fechaU_Valoracion = ?, cedula_usuario = ?, tipo_cita = ? WHERE id_cita = ?";
+        String sql = "UPDATE cita SET fechaHora = ?, estado = ?, motivoC = ?, remitente = ?, fechaU_Valoracion = ?, cedula_usuario = ?, tipo_cita = ?, servicio = ? WHERE id_cita = ?";
         return jdbcTemplate.update(sql,
             cita.getFechaHora(),
             cita.getEstado(),
@@ -118,6 +121,7 @@ public class CitaDAO implements DAO<Cita,Integer> {
             cita.getFechaU_Valoracion(),
             cita.getCedula_usuario(),
             cita.getTipo_cita(),
+            cita.getServicio(),
             cita.getId_cita()
         );
     }
