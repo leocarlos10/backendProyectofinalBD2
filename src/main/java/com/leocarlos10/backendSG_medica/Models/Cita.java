@@ -19,4 +19,14 @@ public class Cita {
     private String cedula_usuario;
     private String tipo_cita;
     private String servicio;
+
+    public Cita(LocalDateTime fechaHora, String estado, String motivoC, String remitente, LocalDate fechaU_Valoracion, String cedula_usuario, String tipo_cita) {
+        this.fechaHora = fechaHora;
+        this.estado = estado;
+        this.motivoC = motivoC;
+        this.remitente = remitente;
+        this.fechaU_Valoracion = fechaU_Valoracion;
+        this.cedula_usuario = cedula_usuario;
+        this.tipo_cita = tipo_cita;
+    }
 } 
