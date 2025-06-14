@@ -1,6 +1,9 @@
 package com.leocarlos10.backendSG_medica.conexionDAO;
 
 import com.leocarlos10.backendSG_medica.Models.Cita;
+import com.leocarlos10.backendSG_medica.Models.CitaUsuarioDTO;
+import com.leocarlos10.backendSG_medica.Models.Usuario;
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +43,38 @@ public class CitaDAO implements DAO<Cita,Integer> {
         }
     }
 
+    private static final class CitaUsuarioRowMapper implements RowMapper<CitaUsuarioDTO> {
+        @Override
+        public CitaUsuarioDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Cita cita = new Cita(
+                rs.getInt("id_cita"),
+                rs.getTimestamp("fechaHora").toLocalDateTime(),
+                rs.getString("estado"),
+                rs.getString("motivoC"),
+                rs.getString("remitente"),
+                rs.getDate("fechaU_Valoracion").toLocalDate(),
+                rs.getString("cedula"),
+                rs.getString("tipo_cita")
+            );
+            Usuario usuario = new Usuario(
+                rs.getString("cedula"),
+                rs.getString("nombre"),
+                rs.getString("apellido"),
+                rs.getString("correo"),
+                rs.getString("telefono"),
+                rs.getString("ciudad"),
+                rs.getDate("fechaNacimiento").toLocalDate()
+            );
+            CitaUsuarioDTO dto = new CitaUsuarioDTO();
+            dto.setCita(cita);
+            dto.setUsuario(usuario);
+            return dto;
+        }
+    
+        
+    }
+
+
     @Override
     public int registrar(Cita cita) throws SQLException {
         String sql = "INSERT INTO cita (fechaHora, estado, motivoC, remitente, fechaU_Valoracion, cedula_usuario, tipo_cita) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -57,6 +92,12 @@ public class CitaDAO implements DAO<Cita,Integer> {
     @Override
     public List<Cita> obtenerTodo() throws SQLException {
         String sql = "SELECT * FROM cita";
+        return jdbcTemplate.query(sql, new CitaRowMapper());
+    }
+
+
+    public List<Cita> obtenerPapeleraCita() throws SQLException {
+        String sql = "SELECT * FROM cita_papelera";
         return jdbcTemplate.query(sql, new CitaRowMapper());
     }
 
@@ -86,5 +127,10 @@ public class CitaDAO implements DAO<Cita,Integer> {
         String sql = "DELETE FROM cita WHERE id_cita = ?";
         return jdbcTemplate.update(sql, id);
     }
-    
+
+
+    public List<CitaUsuarioDTO> obtenerUsuarioCita() throws SQLException {
+        String sql = "CALL obtener_citas_con_usuario()";
+        return jdbcTemplate.query(sql, new CitaUsuarioRowMapper());
+    }
 }

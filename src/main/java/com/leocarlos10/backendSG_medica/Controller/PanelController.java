@@ -3,23 +3,22 @@ package com.leocarlos10.backendSG_medica.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.leocarlos10.backendSG_medica.Models.CitasPanel;
+import com.leocarlos10.backendSG_medica.Models.DiagnosticoPanel;
 import com.leocarlos10.backendSG_medica.conexionDAO.PanelDAO;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.leocarlos10.backendSG_medica.Models.CitasPanel;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/panel")
 
-public class TestController {
+public class PanelController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -46,6 +45,10 @@ public class TestController {
     public List<CitasPanel> obtenerCitasHoy() {
         return panelDAO.obtenerHoy();
     }
-    
+
+    @GetMapping("/diagnosticos")
+    public List<DiagnosticoPanel> obtenerDiagnosticos() {
+        return panelDAO.obtenerDiagnosticos();
+    }
 
 }
