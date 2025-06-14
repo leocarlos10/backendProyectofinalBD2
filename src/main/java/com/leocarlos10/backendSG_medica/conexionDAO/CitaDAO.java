@@ -19,7 +19,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class CitaDAO implements DAO<Cita> {
+public class CitaDAO implements DAO<Cita,Integer> {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -61,7 +61,7 @@ public class CitaDAO implements DAO<Cita> {
     }
 
     @Override
-    public Cita obtenerPorId(int id) throws SQLException {
+    public Cita obtenerPorId(Integer id) throws SQLException {
         String sql = "SELECT * FROM cita WHERE id_cita = ?";
         return jdbcTemplate.queryForObject(sql, new CitaRowMapper(), id);
     }
@@ -82,7 +82,7 @@ public class CitaDAO implements DAO<Cita> {
     }
 
     @Override
-    public int eliminar(int id) throws SQLException {
+    public int eliminar(Integer id) throws SQLException {
         String sql = "DELETE FROM cita WHERE id_cita = ?";
         return jdbcTemplate.update(sql, id);
     }

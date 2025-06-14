@@ -18,7 +18,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class ComentarioDAO implements DAO<Comentario> {
+public class ComentarioDAO implements DAO<Comentario,Integer> {
     
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -52,7 +52,7 @@ public class ComentarioDAO implements DAO<Comentario> {
     }
 
     @Override
-    public Comentario obtenerPorId(int id) throws SQLException {
+    public Comentario obtenerPorId(Integer id) throws SQLException {
         String sql = "SELECT * FROM comentario WHERE id_comentario = ?";
         return jdbcTemplate.queryForObject(sql, new ComentarioRowMapper(), id);
     }
@@ -69,7 +69,7 @@ public class ComentarioDAO implements DAO<Comentario> {
     }
 
     @Override
-    public int eliminar(int id) throws SQLException {
+    public int eliminar(Integer id) throws SQLException {
         String sql = "DELETE FROM comentario WHERE id_comentario = ?";
         return jdbcTemplate.update(sql, id);
     }

@@ -3,6 +3,7 @@ package com.leocarlos10.backendSG_medica.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.leocarlos10.backendSG_medica.conexionDAO.DAO;
+import com.leocarlos10.backendSG_medica.jwt.JWTUtil;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,9 @@ import java.util.List;
 public class service {
 
     @Autowired
-    protected DAO<Usuario> usuarioDAO;
+    protected DAO<Usuario,String> usuarioDAO;
+    @Autowired
+    protected JWTUtil jwt; 
 
     Map<String, List<?>> responseList;
     Map<String, String> response;

@@ -22,6 +22,6 @@ public class UsuariosController extends Controller {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUsuario(@RequestBody Usuario usuario) {
-        return null;
+        return usuarioService.loginUsuario(usuario);
     }
 }

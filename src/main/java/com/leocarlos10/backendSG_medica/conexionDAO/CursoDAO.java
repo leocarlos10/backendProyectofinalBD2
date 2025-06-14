@@ -19,7 +19,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class CursoDAO implements DAO<Curso> {
+public class CursoDAO implements DAO<Curso,Integer> {
     
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -53,7 +53,7 @@ public class CursoDAO implements DAO<Curso> {
     }
 
     @Override
-    public Curso obtenerPorId(int id) throws SQLException {
+    public Curso obtenerPorId(Integer id) throws SQLException {
         String sql = "SELECT * FROM curso WHERE id_curso = ?";
         return jdbcTemplate.queryForObject(sql, new CursoRowMapper(), id);
     }
@@ -70,7 +70,7 @@ public class CursoDAO implements DAO<Curso> {
     }
 
     @Override
-    public int eliminar(int id) throws SQLException {
+    public int eliminar(Integer id) throws SQLException {
         String sql = "DELETE FROM curso WHERE id_curso = ?";
         return jdbcTemplate.update(sql, id);
     }
