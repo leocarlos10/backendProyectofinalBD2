@@ -60,6 +60,7 @@ public class CitaDAO implements DAO<Cita> {
         return jdbcTemplate.query(sql, new CitaRowMapper());
     }
 
+
     public List<Cita> obtenerPapeleraCita() throws SQLException {
         String sql = "SELECT * FROM cita_papelera";
         return jdbcTemplate.query(sql, new CitaRowMapper());
