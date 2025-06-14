@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 
 @RestController
-@RequestMapping("/Panel")
+@RequestMapping("/panel")
 
 public class PanelController {
     @Autowired
