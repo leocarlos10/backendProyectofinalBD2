@@ -55,8 +55,7 @@ public class CitaDAO implements DAO<Cita,Integer> {
                 rs.getString("remitente"),
                 rs.getDate("fechaU_Valoracion").toLocalDate(),
                 rs.getString("cedula"),
-                rs.getString("tipo_cita"),
-                rs.getString("servicio")
+                rs.getString("tipo_cita"), null
             );
             Usuario usuario = new Usuario(
                 rs.getString("cedula"),
