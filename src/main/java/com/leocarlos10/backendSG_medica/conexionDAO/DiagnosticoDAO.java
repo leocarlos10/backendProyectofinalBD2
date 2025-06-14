@@ -1,6 +1,9 @@
 package com.leocarlos10.backendSG_medica.conexionDAO;
 
 import com.leocarlos10.backendSG_medica.Models.Diagnostico;
+import com.leocarlos10.backendSG_medica.Models.Usuario;
+import com.leocarlos10.backendSG_medica.Models.UsuarioDiagnosticoDTO;
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +41,35 @@ public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
             return diagnostico;
         }
     }
+
+    private static final class DiagnosticoUsuarioRowMapper implements RowMapper<UsuarioDiagnosticoDTO> {
+        @Override
+        public UsuarioDiagnosticoDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Diagnostico diagnostico = new Diagnostico(
+                rs.getInt("id_diagnostico"),
+                rs.getString("tratamiento"),
+                rs.getString("observaciones"),
+                rs.getString("nota_corta"),
+                rs.getString("nota_larga"),
+                rs.getDate("fecha_diagnostico").toLocalDate(),
+                rs.getInt("id_historia")
+            );
+            Usuario usuario = new Usuario(
+                rs.getString("cedula_usuario"),
+                rs.getString("nombre"),
+                rs.getString("apellido"),
+                rs.getString("correo"),
+                rs.getString("telefono"),
+                rs.getString("ciudad"),
+                rs.getDate("fecha_nacimiento_usuario").toLocalDate()
+            );
+            UsuarioDiagnosticoDTO dto = new UsuarioDiagnosticoDTO();
+            dto.setUsuario(usuario);
+            dto.setDiagnostico(diagnostico);
+            return dto;
+        }
+    }
+
 
     @Override
     public int registrar(Diagnostico diagnostico) throws SQLException {
@@ -83,4 +115,20 @@ public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
         String sql = "DELETE FROM diagnostico WHERE id_diagnostico = ?";
         return jdbcTemplate.update(sql, id);
     }
-} 
+    
+    public List<UsuarioDiagnosticoDTO> obtenerDiagnosticosConUsuario() throws SQLException {
+        String sql = "CALL diagnosticos_recientes_completo()"; // Asegúrate de que la relación sea correcta
+        return jdbcTemplate.query(sql, new DiagnosticoUsuarioRowMapper());
+    }
+
+    public List<UsuarioDiagnosticoDTO> obtenerDiagnosticosPorUsuario(String cedula) throws SQLException {
+        String sql = "Call diagnosticos_por_usuario(?)"; // Asegúrate de que la relación sea correcta
+        return jdbcTemplate.query(sql, new DiagnosticoUsuarioRowMapper(), cedula);
+    }
+
+    public List<Diagnostico> obtenerDiagnosticosPorHistoria(int idHistoria) throws SQLException {
+        String sql = "SELECT * FROM diagnostico WHERE id_historia = ?";
+        return jdbcTemplate.query(sql, new DiagnosticoRowMapper(), idHistoria);
+    }
+
+}
