@@ -10,6 +10,9 @@ import com.leocarlos10.backendSG_medica.Models.Paciente;
 import com.leocarlos10.backendSG_medica.conexionDAO.UsuarioDAO;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
 
 
 @RestController
@@ -27,5 +30,18 @@ public class PacientesController {
             return java.util.Collections.emptyList();
         }
     }
+
+    @GetMapping("/por-estado/{estado}")
+public List<Paciente> obtenerPacientesPorEstado(@PathVariable String estado) {
+    try {
+        return paciente.obtenerPacientesPorEstado(estado);
+    } catch (java.sql.SQLException e) {
+        e.printStackTrace();
+        return java.util.Collections.emptyList();
+    }
+}
+
+   
+    
     
 }

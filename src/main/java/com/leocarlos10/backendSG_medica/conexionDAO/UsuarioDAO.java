@@ -51,7 +51,7 @@ public class UsuarioDAO implements DAO<Usuario, String> {
             paciente.setCedula(rs.getString("cedula"));
             paciente.setTelefono(rs.getString("telefono"));
             paciente.setEmail(rs.getString("email"));
-            paciente.setFecha_nacimiento(rs.getDate("fechaNacimiento").toLocalDate());
+            paciente.setFecha_nacimiento(rs.getDate("fecha_nacimiento").toLocalDate());
             paciente.setUltima_cita(rs.getDate("ultima_cita").toLocalDate());
             paciente.setEstado(rs.getString("estado_ultima_cita"));
             return paciente;
@@ -112,6 +112,10 @@ public class UsuarioDAO implements DAO<Usuario, String> {
         return jdbcTemplate.query(sql, new PacientesRowMapper());
     }
 
+    public List<Paciente> obtenerPacientesPorEstado(String estado) throws SQLException {
+        String sql = "CALL pacientes_por_estado(?)";
+        return jdbcTemplate.query(sql, new PacientesRowMapper(), estado);
+    }
 
    
 } 
