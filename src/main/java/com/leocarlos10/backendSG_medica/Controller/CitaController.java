@@ -3,6 +3,7 @@ package com.leocarlos10.backendSG_medica.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.leocarlos10.backendSG_medica.Models.Cita;
+import com.leocarlos10.backendSG_medica.Models.CitaUsuarioDTO;
 import com.leocarlos10.backendSG_medica.conexionDAO.CitaDAO;
 
 import java.util.List;
@@ -87,5 +88,15 @@ public class CitaController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/con-usuario")
+    public List<CitaUsuarioDTO> obtenerCitasConUsuario() {
+    try {
+        return citaDAO.obtenerUsuarioCita();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return java.util.Collections.emptyList();
+    }
+}
 
 }
