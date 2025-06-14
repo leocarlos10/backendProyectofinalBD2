@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 
