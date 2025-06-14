@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @RestController
-@RequestMapping("/citas")
+@RequestMapping("/api/citas")
 public class CitaController extends Controller{
 
     /**

@@ -104,9 +104,23 @@ public class JWTUtil {
         return claims.getId();
     }
 
-    public boolean validarToken(String token){
-        String idusuario = getKey(token);
+    /**
+     * @descripcion: Valida si el token es valido, hace uso de substring(7)
+     * para quitar el prefijo "Bearer " si existe.
+     * @param token: Token a validar
+     * @return true si el token es valido, false en caso contrario
+     */
 
-        return idusuario !=null;
+    public boolean validarToken(String token){
+        try {
+            // Remover el prefijo "Bearer " si existe
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            String idusuario = getKey(token);
+            return idusuario != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
