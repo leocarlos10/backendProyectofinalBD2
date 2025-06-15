@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestHeader;
-import java.util.HashMap;
+import java.util.Map;
 
 
 
@@ -36,32 +36,34 @@ public class CitaController extends Controller{
      */
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarCita(@RequestBody Cita cita, @RequestHeader(value = "Authorization") String token) {
-      
-        
         try {
             if(jwt.validarToken(token)){
                 int filas = citaDAO.registrar(cita);
                 if(filas > 0){
-                    return ResponseHttp(HttpStatus.OK, respuesta("mensaje", "Cita registrada correctamente"));
+                    return ResponseHttp(HttpStatus.OK, Map.of("mensaje", "Cita registrada correctamente"));
                 }else{
-                    return ResponseHttp(HttpStatus.BAD_REQUEST, respuesta("mensaje", "No se pudo registrar la cita"));
+                    return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo registrar la cita"));
                 }
             } else{
-                return ResponseHttp(HttpStatus.UNAUTHORIZED, respuesta("mensaje", "Token invalido"));
+                return ResponseHttp(HttpStatus.UNAUTHORIZED, Map.of("mensaje", "Token invalido"));
             }
         } catch (Exception e) {
             System.out.println("error registrarCita-CitaController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, respuesta("mensaje", "Error al registrar cita"));
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al registrar cita"));
         }
     }
 
     @GetMapping("/obtener-todas")
-    public List<Cita> citas(){
+    public ResponseEntity<?> citas(){
         try {
-            return citaDAO.obtenerTodo();
+            List<Cita> citas =  citaDAO.obtenerTodo();
+            if(!citas.isEmpty()){
+                return ResponseHttp(HttpStatus.OK, Map.of("citas", citas));
+            }
+            return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron citas"));
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-            return java.util.Collections.emptyList();
+            System.out.println("error citas-CitaController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener las citas"));
         }
     }
 
@@ -128,15 +130,14 @@ public class CitaController extends Controller{
         try {
             List<Cita> citas = citaDAO.obtenerCitaPorUsuario(cedula);
             if(!citas.isEmpty()){
-                responseList = new HashMap<>();
-                responseList.put("citas", citas);
-                return ResponseHttpOfObject(HttpStatus.OK, responseList);
+                
+                return ResponseHttp(HttpStatus.OK, Map.of("citas", citas));
             }else{
-                return ResponseHttp(HttpStatus.NOT_FOUND, respuesta("mensaje", "No se encontraron citas"));
+                return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron citas"));
             }
         } catch (Exception e) {
             System.out.println("error obtenerCitaPorUsuario-CitaController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, respuesta("mensaje", "Error al obtener las citas"));
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener las citas"));
         }
     }
 }

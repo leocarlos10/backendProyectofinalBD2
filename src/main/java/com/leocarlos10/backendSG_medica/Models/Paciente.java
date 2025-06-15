@@ -1,6 +1,7 @@
 package com.leocarlos10.backendSG_medica.Models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +17,8 @@ public class Paciente {
     private String cedula;
     private String telefono;
     private String email;
-    private LocalDate fecha_nacimiento;
-    private LocalDate ultima_cita;
+    private LocalDate fechaNacimiento;
+    private LocalDateTime ultima_cita;
     private String estado;
 
 }

@@ -18,5 +18,6 @@ private String tipoCita;
 private String nombreUsuario;
 private String apellidoUsuario;
 private String cedulaUsuario;
+private String servicio;
     
 }

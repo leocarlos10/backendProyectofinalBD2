@@ -33,6 +33,7 @@ public class PanelDAO {
             cita.setNombreUsuario(rs.getString("nombre"));
             cita.setApellidoUsuario(rs.getString("apellido"));
             cita.setCedulaUsuario(rs.getString("cedula"));
+            cita.setServicio(rs.getString("servicio"));
             return cita;
         }
             

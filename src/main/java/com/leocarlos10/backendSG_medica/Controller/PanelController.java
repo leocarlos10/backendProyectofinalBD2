@@ -12,13 +12,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import java.util.Map;
 
 
 
 @RestController
-@RequestMapping("/panel")
+@RequestMapping("/api/panel")
 
-public class PanelController {
+public class PanelController extends Controller{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -37,8 +40,17 @@ public class PanelController {
     }
 
     @GetMapping("/citas-proximas")
-    public List<CitasPanel> obtenerCitasProximas() {
-        return panelDAO.obtenerCitasProximas();
+    public ResponseEntity<?> obtenerCitasProximas() {
+        try {
+            List<CitasPanel> citas = panelDAO.obtenerCitasProximas();
+            if(!citas.isEmpty()){
+                return ResponseHttp(HttpStatus.OK, Map.of("citas", citas));
+            }
+            return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron citas"));
+        } catch (Exception e) {
+            System.out.println("error obtenerCitasProximas-PanelController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "No hay citas Proximas"));
+        }
     }
 
     @GetMapping("/citas-hoy")
@@ -47,8 +59,17 @@ public class PanelController {
     }
 
     @GetMapping("/diagnosticos")
-    public List<DiagnosticoPanel> obtenerDiagnosticos() {
-        return panelDAO.obtenerDiagnosticos();
+    public ResponseEntity<?> obtenerDiagnosticos() {
+        try {
+            List<DiagnosticoPanel> diagnosticos = panelDAO.obtenerDiagnosticos();
+            if(!diagnosticos.isEmpty()){
+                return ResponseHttp(HttpStatus.OK, Map.of("diagnosticos", diagnosticos));
+            }
+            return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No hay diagnosticos"));
+        } catch (Exception e) {
+            System.out.println("error obtenerDiagnosticos-PanelController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "No hay diagnosticos"));
+        }
     }
 
 }
