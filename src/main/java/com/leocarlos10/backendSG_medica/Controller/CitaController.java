@@ -35,7 +35,8 @@ public class CitaController extends Controller{
      */
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarCita(@RequestBody Cita cita, @RequestHeader(value = "Authorization") String token) {
-
+      
+        
         try {
             if(jwt.validarToken(token)){
                 int filas = citaDAO.registrar(cita);

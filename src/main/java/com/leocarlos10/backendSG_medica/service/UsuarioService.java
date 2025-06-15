@@ -61,7 +61,7 @@ public class UsuarioService extends service {
             }
         } catch (Exception e) {
             System.out.println("Error loginUusario-UsuarioService" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, respuesta("mensaje", "Error al iniciar sesión"));
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, respuesta("mensaje", "Error al iniciar sesión, Porfavor intente mas tarde"));
         }
     }
 
