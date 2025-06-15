@@ -136,4 +136,9 @@ public class CitaDAO implements DAO<Cita,Integer> {
         String sql = "CALL obtener_citas_con_usuario()";
         return jdbcTemplate.query(sql, new CitaUsuarioRowMapper());
     }
+
+    public List<Cita> obtenerCitaPorUsuario(String cedula) throws SQLException {
+        String sql = "SELECT * FROM cita WHERE cedula_usuario = ?";
+        return jdbcTemplate.query(sql, new CitaRowMapper(), cedula);
+    }
 }

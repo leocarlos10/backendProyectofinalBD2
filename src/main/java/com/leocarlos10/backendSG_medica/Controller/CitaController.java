@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestHeader;
+import java.util.HashMap;
 
 
 
@@ -114,12 +115,28 @@ public class CitaController extends Controller{
 
     @GetMapping("/con-usuario")
     public List<CitaUsuarioDTO> obtenerCitasConUsuario() {
-    try {
-        return citaDAO.obtenerUsuarioCita();
-    } catch (Exception e) {
-        e.printStackTrace();
-        return java.util.Collections.emptyList();
+        try {
+            return citaDAO.obtenerUsuarioCita();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return java.util.Collections.emptyList();
+        }
     }
-}
 
+    @GetMapping("/get-cita-usuario/{cedula}")
+    public ResponseEntity<?> obtenerCitaPorUsuario(@PathVariable String cedula) {
+        try {
+            List<Cita> citas = citaDAO.obtenerCitaPorUsuario(cedula);
+            if(!citas.isEmpty()){
+                responseList = new HashMap<>();
+                responseList.put("citas", citas);
+                return ResponseHttpOfObject(HttpStatus.OK, responseList);
+            }else{
+                return ResponseHttp(HttpStatus.NOT_FOUND, respuesta("mensaje", "No se encontraron citas"));
+            }
+        } catch (Exception e) {
+            System.out.println("error obtenerCitaPorUsuario-CitaController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, respuesta("mensaje", "Error al obtener las citas"));
+        }
+    }
 }
