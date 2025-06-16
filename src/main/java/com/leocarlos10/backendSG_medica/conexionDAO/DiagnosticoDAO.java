@@ -16,17 +16,18 @@ import java.util.List;
 /**
  * @Repository: Indica que esta clase es un repositorio de Spring
  * @Transactional: Indica que esta clase es transaccional,
- * Garantiza que las operaciones de base de datos sean atómicas y consistentes, 
- * manejando automáticamente las transacciones.
+ *                 Garantiza que las operaciones de base de datos sean atómicas
+ *                 y consistentes,
+ *                 manejando automáticamente las transacciones.
  */
 
 @Repository
 @Transactional
 public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
-    
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    
+
     private static final class DiagnosticoRowMapper implements RowMapper<Diagnostico> {
         @Override
         public Diagnostico mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -46,23 +47,21 @@ public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
         @Override
         public UsuarioDiagnosticoDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
             Diagnostico diagnostico = new Diagnostico(
-                rs.getInt("id_diagnostico"),
-                rs.getString("tratamiento"),
-                rs.getString("observaciones"),
-                rs.getString("nota_corta"),
-                rs.getString("nota_larga"),
-                rs.getDate("fecha_diagnostico").toLocalDate(),
-                rs.getInt("id_historia")
-            );
+                    rs.getInt("id_diagnostico"),
+                    rs.getString("tratamiento"),
+                    rs.getString("observaciones"),
+                    rs.getString("nota_corta"),
+                    rs.getString("nota_larga"),
+                    rs.getDate("fecha_diagnostico").toLocalDate(),
+                    rs.getInt("id_historia"));
             Usuario usuario = new Usuario(
-                rs.getString("cedula_usuario"),
-                rs.getString("nombre"),
-                rs.getString("apellido"),
-                rs.getString("correo"),
-                rs.getString("telefono"),
-                rs.getString("ciudad"),
-                rs.getDate("fecha_nacimiento_usuario").toLocalDate()
-            );
+                    rs.getString("cedula_usuario"),
+                    rs.getString("nombre"),
+                    rs.getString("apellido"),
+                    rs.getString("correo"),
+                    rs.getString("telefono"),
+                    rs.getString("ciudad"),
+                    rs.getDate("fecha_nacimiento_usuario").toLocalDate());
             UsuarioDiagnosticoDTO dto = new UsuarioDiagnosticoDTO();
             dto.setUsuario(usuario);
             dto.setDiagnostico(diagnostico);
@@ -70,18 +69,16 @@ public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
         }
     }
 
-
     @Override
     public int registrar(Diagnostico diagnostico) throws SQLException {
         String sql = "INSERT INTO diagnostico (tratamiento, observaciones, nota_corta, nota_larga, fecha, id_historia) VALUES (?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, 
-            diagnostico.getTratamiento(),
-            diagnostico.getObservaciones(),
-            diagnostico.getNota_corta(),
-            diagnostico.getNota_larga(),
-            diagnostico.getFecha(),
-            diagnostico.getId_historia()
-        );
+        return jdbcTemplate.update(sql,
+                diagnostico.getTratamiento(),
+                diagnostico.getObservaciones(),
+                diagnostico.getNota_corta(),
+                diagnostico.getNota_larga(),
+                diagnostico.getFecha(),
+                diagnostico.getId_historia());
     }
 
     @Override
@@ -100,14 +97,13 @@ public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
     public int actualizar(Diagnostico diagnostico) throws SQLException {
         String sql = "UPDATE diagnostico SET tratamiento = ?, observaciones = ?, nota_corta = ?, nota_larga = ?, fecha = ?, id_historia = ? WHERE id_diagnostico = ?";
         return jdbcTemplate.update(sql,
-            diagnostico.getTratamiento(),
-            diagnostico.getObservaciones(),
-            diagnostico.getNota_corta(),
-            diagnostico.getNota_larga(),
-            diagnostico.getFecha(),
-            diagnostico.getId_historia(),
-            diagnostico.getId_diagnostico()
-        );
+                diagnostico.getTratamiento(),
+                diagnostico.getObservaciones(),
+                diagnostico.getNota_corta(),
+                diagnostico.getNota_larga(),
+                diagnostico.getFecha(),
+                diagnostico.getId_historia(),
+                diagnostico.getId_diagnostico());
     }
 
     @Override
@@ -115,7 +111,7 @@ public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
         String sql = "DELETE FROM diagnostico WHERE id_diagnostico = ?";
         return jdbcTemplate.update(sql, id);
     }
-    
+
     public List<UsuarioDiagnosticoDTO> obtenerDiagnosticosConUsuario() throws SQLException {
         String sql = "CALL diagnosticos_recientes_completo()"; // Asegúrate de que la relación sea correcta
         return jdbcTemplate.query(sql, new DiagnosticoUsuarioRowMapper());
@@ -131,4 +127,14 @@ public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
         return jdbcTemplate.query(sql, new DiagnosticoRowMapper(), idHistoria);
     }
 
+    public int crearDiagnosticoConHistoria(
+            String idHistoria,
+            String tratamiento,
+            String observaciones,
+            String notaCorta,
+            String notaLarga,
+            java.sql.Date fecha) throws SQLException {
+        String sql = "CALL crear_diagnostico_con_historia(?, ?, ?, ?, ?, ?)";
+        return jdbcTemplate.update(sql, idHistoria, tratamiento, observaciones, notaCorta, notaLarga, fecha);
+    }
 }

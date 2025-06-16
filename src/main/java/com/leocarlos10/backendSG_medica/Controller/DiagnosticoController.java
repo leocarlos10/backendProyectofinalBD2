@@ -1,5 +1,6 @@
 package com.leocarlos10.backendSG_medica.Controller;
 
+import com.leocarlos10.backendSG_medica.Models.CrearDiagnosticoDTO;
 import com.leocarlos10.backendSG_medica.Models.Diagnostico;
 import com.leocarlos10.backendSG_medica.Models.UsuarioDiagnosticoDTO;
 import com.leocarlos10.backendSG_medica.conexionDAO.DiagnosticoDAO;
@@ -106,4 +107,26 @@ public class DiagnosticoController extends Controller {
             return 0;
         }
     }
+    @PostMapping("/crear-con-historia")
+public ResponseEntity<?> crearDiagnosticoConHistoria(@RequestBody CrearDiagnosticoDTO dto) {
+    try {
+        int result = diagnosticoDAO.crearDiagnosticoConHistoria(
+            dto.getIdHistoria(),
+            dto.getTratamiento(),
+            dto.getObservaciones(),
+            dto.getNotaCorta(),
+            dto.getNotaLarga(),
+            dto.getFecha()
+        );
+        if(result > 0){
+            return ResponseHttp(HttpStatus.CREATED, Map.of("mensaje", "Diagnóstico creado correctamente"));
+        }else{
+            return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo crear el diagnóstico"));
+        }
+    } catch (Exception e) {
+        System.out.println("error crearDiagnosticoConHistoria-DiagnosticoController" + e);
+        return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al crear el diagnóstico"));
+    }
+}
+
 }
