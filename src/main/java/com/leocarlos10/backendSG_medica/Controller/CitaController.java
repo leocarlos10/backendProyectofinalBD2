@@ -102,16 +102,17 @@ public class CitaController extends Controller{
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarCita(@PathVariable int id) {
+    public ResponseEntity<?> eliminarCita(@PathVariable int id) {
         try {
             int filas = citaDAO.eliminar(id);
             if (filas > 0) {
-                return ResponseEntity.ok("Cita eliminada correctamente");
+                return ResponseHttp(HttpStatus.OK, Map.of("mensaje", "Cita eliminada correctamente","respuesta", true));
             } else {
-                return ResponseEntity.badRequest().body("No se pudo eliminar la cita");
+                return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo eliminar la cita","respuesta", false));
             }
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+            System.out.println("error eliminarCita-CitaController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al eliminar la cita","respuesta", false));
         }
     }
 

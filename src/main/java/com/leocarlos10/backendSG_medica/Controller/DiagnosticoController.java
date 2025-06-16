@@ -97,13 +97,18 @@ public class DiagnosticoController extends Controller {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public int eliminar(@PathVariable Integer id) {
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
         try {
-            return diagnosticoDAO.eliminar(id);
+            int respuesta =  diagnosticoDAO.eliminar(id);
+            if(respuesta > 0){
+                return ResponseHttp(HttpStatus.OK, Map.of("mensaje", "Diagnostico eliminado correctamente","respuesta", true));
+            }else{
+                return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo eliminar el diagnostico","respuesta", false));
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
+            System.out.println("error eliminar-DiagnosticoController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al eliminar el diagnostico","respuesta", false));
         }
     }
 }
