@@ -128,15 +128,14 @@ public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
     }
 
     public int crearDiagnosticoConHistoria(
-            String idHistoria,
+            String cedulaUsuario,
             String tratamiento,
             String observaciones,
             String notaCorta,
             String notaLarga,
             java.sql.Date fecha) throws SQLException {
         String sql = "CALL crear_diagnostico_con_historia(?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, idHistoria, tratamiento, observaciones, notaCorta, notaLarga, fecha);
+        return jdbcTemplate.update(sql, cedulaUsuario, tratamiento, observaciones, notaCorta, notaLarga, fecha);
     }
-    
-    
+
 }

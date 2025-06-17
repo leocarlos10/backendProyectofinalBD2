@@ -103,15 +103,18 @@ public class DiagnosticoController extends Controller {
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Integer id) {
         try {
-            int respuesta =  diagnosticoDAO.eliminar(id);
-            if(respuesta > 0){
-                return ResponseHttp(HttpStatus.OK, Map.of("mensaje", "Diagnostico eliminado correctamente","respuesta", true));
-            }else{
-                return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo eliminar el diagnostico","respuesta", false));
+            int respuesta = diagnosticoDAO.eliminar(id);
+            if (respuesta > 0) {
+                return ResponseHttp(HttpStatus.OK,
+                        Map.of("mensaje", "Diagnostico eliminado correctamente", "respuesta", true));
+            } else {
+                return ResponseHttp(HttpStatus.BAD_REQUEST,
+                        Map.of("mensaje", "No se pudo eliminar el diagnostico", "respuesta", false));
             }
         } catch (Exception e) {
             System.out.println("error eliminar-DiagnosticoController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al eliminar el diagnostico","respuesta", false));
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR,
+                    Map.of("mensaje", "Error al eliminar el diagnostico", "respuesta", false));
         }
     }
 
@@ -119,7 +122,7 @@ public class DiagnosticoController extends Controller {
     public ResponseEntity<?> crearDiagnosticoConHistoria(@RequestBody CrearDiagnosticoDTO dto) {
         try {
             int result = diagnosticoDAO.crearDiagnosticoConHistoria(
-                    dto.getIdHistoria(),
+                    dto.getCedulaUsuario(),
                     dto.getTratamiento(),
                     dto.getObservaciones(),
                     dto.getNotaCorta(),
@@ -134,7 +137,6 @@ public class DiagnosticoController extends Controller {
             System.out.println("error crearDiagnosticoConHistoria-DiagnosticoController" + e);
             return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al crear el diagnóstico"));
         }
-
     }
 
 }
