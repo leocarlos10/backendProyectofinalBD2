@@ -137,4 +137,6 @@ public class DiagnosticoDAO implements DAO<Diagnostico, Integer> {
         String sql = "CALL crear_diagnostico_con_historia(?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql, idHistoria, tratamiento, observaciones, notaCorta, notaLarga, fecha);
     }
+    
+    
 }

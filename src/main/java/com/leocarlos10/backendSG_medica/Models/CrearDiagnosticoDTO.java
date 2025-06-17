@@ -11,4 +11,5 @@ public class CrearDiagnosticoDTO {
     private String notaCorta;
     private String notaLarga;
     private Date fecha;
+
 }

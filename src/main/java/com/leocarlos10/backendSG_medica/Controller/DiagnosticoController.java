@@ -21,15 +21,16 @@ public class DiagnosticoController extends Controller {
     @GetMapping("/con-usuario")
     public ResponseEntity<?> obtenerDiagnosticosConUsuario() {
         try {
-            List<UsuarioDiagnosticoDTO> diagnosticos =  diagnosticoDAO.obtenerDiagnosticosConUsuario();
-            if(!diagnosticos.isEmpty()){
+            List<UsuarioDiagnosticoDTO> diagnosticos = diagnosticoDAO.obtenerDiagnosticosConUsuario();
+            if (!diagnosticos.isEmpty()) {
                 return ResponseHttp(HttpStatus.OK, Map.of("diagnosticos", diagnosticos));
-            }else{
+            } else {
                 return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron diagnosticos"));
             }
         } catch (Exception e) {
             System.out.println("error obtenerDiagnosticosConUsuario-DiagnosticoController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener los diagnosticos"));
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR,
+                    Map.of("mensaje", "Error al obtener los diagnosticos"));
         }
     }
 
@@ -57,14 +58,15 @@ public class DiagnosticoController extends Controller {
     public ResponseEntity<?> obtenerTodos() {
         try {
             List<Diagnostico> diagnosticos = diagnosticoDAO.obtenerTodo();
-            if(!diagnosticos.isEmpty()){
+            if (!diagnosticos.isEmpty()) {
                 return ResponseHttp(HttpStatus.OK, Map.of("diagnosticos", diagnosticos));
-            }else{
+            } else {
                 return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron diagnosticos"));
             }
         } catch (Exception e) {
             System.out.println("error obtenerTodos-DiagnosticoController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener los diagnosticos"));
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR,
+                    Map.of("mensaje", "Error al obtener los diagnosticos"));
         }
     }
 
@@ -107,26 +109,27 @@ public class DiagnosticoController extends Controller {
             return 0;
         }
     }
+
     @PostMapping("/crear-con-historia")
-public ResponseEntity<?> crearDiagnosticoConHistoria(@RequestBody CrearDiagnosticoDTO dto) {
-    try {
-        int result = diagnosticoDAO.crearDiagnosticoConHistoria(
-            dto.getIdHistoria(),
-            dto.getTratamiento(),
-            dto.getObservaciones(),
-            dto.getNotaCorta(),
-            dto.getNotaLarga(),
-            dto.getFecha()
-        );
-        if(result > 0){
-            return ResponseHttp(HttpStatus.CREATED, Map.of("mensaje", "Diagnóstico creado correctamente"));
-        }else{
-            return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo crear el diagnóstico"));
+    public ResponseEntity<?> crearDiagnosticoConHistoria(@RequestBody CrearDiagnosticoDTO dto) {
+        try {
+            int result = diagnosticoDAO.crearDiagnosticoConHistoria(
+                    dto.getIdHistoria(),
+                    dto.getTratamiento(),
+                    dto.getObservaciones(),
+                    dto.getNotaCorta(),
+                    dto.getNotaLarga(),
+                    dto.getFecha());
+            if (result > 0) {
+                return ResponseHttp(HttpStatus.CREATED, Map.of("mensaje", "Diagnóstico creado correctamente"));
+            } else {
+                return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo crear el diagnóstico"));
+            }
+        } catch (Exception e) {
+            System.out.println("error crearDiagnosticoConHistoria-DiagnosticoController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al crear el diagnóstico"));
         }
-    } catch (Exception e) {
-        System.out.println("error crearDiagnosticoConHistoria-DiagnosticoController" + e);
-        return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al crear el diagnóstico"));
+
     }
-}
 
 }
