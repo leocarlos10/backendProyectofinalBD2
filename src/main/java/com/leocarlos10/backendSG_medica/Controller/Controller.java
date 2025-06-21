@@ -4,7 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.leocarlos10.backendSG_medica.service.UsuarioService;
-import com.leocarlos10.backendSG_medica.conexionDAO.CitaDAO; 
+import com.leocarlos10.backendSG_medica.conexionDAO.CitaDAO;
+import com.leocarlos10.backendSG_medica.conexionDAO.HistoriaClinicaDAO;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import java.util.Map;
@@ -20,6 +22,8 @@ public class Controller {
     protected UsuarioService usuarioService;
     @Autowired
     protected CitaDAO citaDAO;
+    @Autowired
+    protected HistoriaClinicaDAO historiaCli_Controller;
     @Autowired
     protected JWTUtil jwt;
     

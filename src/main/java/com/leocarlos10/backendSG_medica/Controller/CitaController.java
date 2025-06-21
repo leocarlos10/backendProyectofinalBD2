@@ -117,12 +117,17 @@ public class CitaController extends Controller{
     }
 
     @GetMapping("/con-usuario")
-    public List<CitaUsuarioDTO> obtenerCitasConUsuario() {
+    public ResponseEntity<?> obtenerCitasConUsuario() {
         try {
-            return citaDAO.obtenerUsuarioCita();
+            List<CitaUsuarioDTO> citas = citaDAO.obtenerUsuarioCita();
+            if (!citas.isEmpty()) {
+                return ResponseHttp(HttpStatus.OK, Map.of("citas", citas));
+            } else {
+                return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron citas con usuarios", "respuesta", false));
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            return java.util.Collections.emptyList();
+            System.out.println("error obtenerCitasConUsuario-CitaController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener las citas con usuarios", "respuesta", false));
         }
     }
 

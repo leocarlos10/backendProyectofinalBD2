@@ -35,12 +35,18 @@ public class DiagnosticoController extends Controller {
     }
 
     @GetMapping("/por-usuario/{cedula}")
-    public List<UsuarioDiagnosticoDTO> obtenerDiagnosticosPorUsuario(@PathVariable String cedula) {
+    public ResponseEntity<?> obtenerDiagnosticosPorUsuario(@PathVariable String cedula) {
         try {
-            return diagnosticoDAO.obtenerDiagnosticosPorUsuario(cedula);
+            List<UsuarioDiagnosticoDTO> Lista_D_U =  diagnosticoDAO.obtenerDiagnosticosPorUsuario(cedula);
+            if (!Lista_D_U.isEmpty()) {
+                return ResponseHttp(HttpStatus.OK, Map.of("diagnosticos", Lista_D_U));
+            } else {
+                return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron diagnosticos"));
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            return java.util.Collections.emptyList();
+            System.out.println("error obtenerDiagnosticosPorUsuario-DiagnosticoController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR,
+                    Map.of("mensaje", "Error al obtener los diagnosticos"));
         }
     }
 
@@ -129,13 +135,13 @@ public class DiagnosticoController extends Controller {
                     dto.getNotaLarga(),
                     dto.getFecha());
             if (result > 0) {
-                return ResponseHttp(HttpStatus.CREATED, Map.of("mensaje", "Diagnóstico creado correctamente"));
+                return ResponseHttp(HttpStatus.CREATED, Map.of("mensaje", "Diagnóstico creado correctamente", "respuesta", true));
             } else {
-                return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo crear el diagnóstico"));
+                return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo crear el diagnóstico", "respuesta", false));
             }
         } catch (Exception e) {
             System.out.println("error crearDiagnosticoConHistoria-DiagnosticoController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al crear el diagnóstico"));
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al crear el diagnóstico", "respuesta", false));
         }
     }
 
