@@ -88,16 +88,17 @@ public class CitaController extends Controller{
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<String> actualizarCita(@RequestBody Cita cita) {
+    public ResponseEntity<?> actualizarCita(@RequestBody Cita cita) {
         try {
             int filas = citaDAO.actualizar(cita);
             if (filas > 0) {
-                return ResponseEntity.ok("Cita actualizada correctamente");
+                return ResponseHttp(HttpStatus.OK, Map.of("mensaje", "Cita actualizada correctamente","respuesta", true));
             } else {
-                return ResponseEntity.badRequest().body("No se pudo actualizar la cita");
+                return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo actualizar la cita","respuesta", false));
             }
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+            System.out.println("error actualizarCita-CitaController" + e);
+            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al actualizar la cita","respuesta", false));
         }
     }
 

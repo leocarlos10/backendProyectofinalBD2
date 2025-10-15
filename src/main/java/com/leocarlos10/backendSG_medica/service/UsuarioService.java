@@ -50,7 +50,7 @@ public class UsuarioService extends service {
                     String token = jwt.create(usuario.getCedula(), usuario.getNombre());
                     response.put("token", token);
                     response.put("nombre", user.getNombre());
-                    response.put("cedula", user.getCedula());
+                    response.put("cedula", user.getCedula()); 
                     return ResponseHttp(HttpStatus.OK, response);
 
                 } else {
