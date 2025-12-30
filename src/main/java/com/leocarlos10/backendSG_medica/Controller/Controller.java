@@ -13,10 +13,7 @@ import java.util.Map;
 import com.leocarlos10.backendSG_medica.jwt.JWTUtil;
 
 
-
-@RestController
-@RequestMapping("/api")
-public class Controller {
+public abstract class Controller {
 
     @Autowired
     protected UsuarioService usuarioService;

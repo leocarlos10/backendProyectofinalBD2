@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/diagnostico")
+@RequestMapping("/api/diagnostico")
 public class DiagnosticoController extends Controller {
 
     @Autowired
