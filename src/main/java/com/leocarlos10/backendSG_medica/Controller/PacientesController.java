@@ -1,67 +1,40 @@
 package com.leocarlos10.backendSG_medica.Controller;
 
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.leocarlos10.backendSG_medica.Models.Paciente;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
-import com.leocarlos10.backendSG_medica.conexionDAO.UsuarioDAO;
-
+import com.leocarlos10.backendSG_medica.dto.ApiResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-
-
 
 @RestController
 @RequestMapping("/api/pacientes")
-public class PacientesController extends Controller{
-    @Autowired
-    private UsuarioDAO pacienteDAO;
+public class PacientesController extends Controller {
 
     @GetMapping("/ultima-cita")
-    public ResponseEntity<?> obtenerPacientesConUltimaCita() {
-        try {
-            List<Paciente> pacientes = pacienteDAO.obtenerPacientesUltimaCita();
-            if(!pacientes.isEmpty()){
-                return ResponseHttp(HttpStatus.OK, Map.of("pacientes", pacientes));
-            } else{
-                return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron pacientes"));
-            }
-        } catch (java.sql.SQLException e) {
-            System.out.println("error obtenerPacientesConUltimaCita-PacientesController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener los pacientes"));
-        }
+    public ResponseEntity<ApiResponse<?>> obtenerPacientesConUltimaCita() {
+        List<Paciente> pacientes = pacienteService.obtenerPacientesConUltimaCita();
+
+        ApiResponse<?> response = ApiResponse.success("Pacientes obtenidos exitosamente", pacientes);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/por-estado/{estado}")
-    public List<Paciente> obtenerPacientesPorEstado(@PathVariable String estado) {
-        try {
-            return pacienteDAO.obtenerPacientesPorEstado(estado);
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-            return java.util.Collections.emptyList();
-        }
+    public ResponseEntity<ApiResponse<?>> obtenerPacientesPorEstado(@PathVariable String estado) {
+        List<Paciente> pacientes = pacienteService.obtenerPacientesPorEstado(estado);
+
+        ApiResponse<?> response = ApiResponse.success("Pacientes por estado obtenidos", pacientes);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/por-cedula/{cedula}")
-    public ResponseEntity<?> obtenerPacientePorCedula(@PathVariable String cedula) {
-        try {
-            Usuario paciente = pacienteDAO.obtenerPorId(cedula);
-            if(paciente != null){
-                return ResponseHttp(HttpStatus.OK, Map.of("paciente", paciente));
-            } else{
-                return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "Paciente no encontrado"));
-            }
-        } catch (Exception e) {
-            System.out.println("error obtenerPacientePorCedula-PacientesController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener el paciente"));
-        }
+    public ResponseEntity<ApiResponse<?>> obtenerPacientePorCedula(@PathVariable String cedula) {
+        Usuario paciente = pacienteService.obtenerPacientePorCedula(cedula);
+
+        ApiResponse<?> response = ApiResponse.success("Paciente obtenido exitosamente", paciente);
+        return ResponseEntity.ok(response);
     }
 }

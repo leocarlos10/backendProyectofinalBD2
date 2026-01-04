@@ -1,150 +1,89 @@
 package com.leocarlos10.backendSG_medica.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
-import com.leocarlos10.backendSG_medica.Models.Cita;
-import com.leocarlos10.backendSG_medica.Models.CitaUsuarioDTO;
-import java.util.List;
-
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestHeader;
-import java.util.Map;
-
-
-
+import com.leocarlos10.backendSG_medica.Models.Cita;
+import com.leocarlos10.backendSG_medica.Models.CitaUsuarioDTO;
+import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/citas")
-public class CitaController extends Controller{
+public class CitaController extends Controller {
 
-    /**
-     * Este metodo es el encargado de registrar una cita
-     * @param cita: La cita a registrar
-     * @param token: El token de autenticacion
-     * @return: Un objeto de tipo ResponseEntity que contiene el resultado de la operación
-     * este objeto puede ser el token(200), bad request(400) o un error(500) o un unauthorized(401).
-     */
     @PostMapping("/registrar")
-    public ResponseEntity<?> registrarCita(@RequestBody Cita cita, @RequestHeader(value = "Authorization") String token) {
-        try {
-            if(jwt.validarToken(token)){
-                int filas = citaDAO.registrar(cita);
-                if(filas > 0){
-                    return ResponseHttp(HttpStatus.OK, Map.of("mensaje", "Cita registrada correctamente"));
-                }else{
-                    return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo registrar la cita"));
-                }
-            } else{
-                return ResponseHttp(HttpStatus.UNAUTHORIZED, Map.of("mensaje", "Token invalido"));
-            }
-        } catch (Exception e) {
-            System.out.println("error registrarCita-CitaController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al registrar cita"));
-        }
+    public ResponseEntity<ApiResponse<?>> registrarCita(@RequestBody Cita cita,
+            @RequestHeader(value = "Authorization") String token) {
+        validarToken(token);
+
+        Cita citaRegistrada = citaService.registrarCita(cita);
+
+        ApiResponse<?> response = ApiResponse.success("Cita registrada correctamente", citaRegistrada);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/obtener-todas")
-    public ResponseEntity<?> citas(){
-        try {
-            List<Cita> citas =  citaDAO.obtenerTodo();
-            if(!citas.isEmpty()){
-                return ResponseHttp(HttpStatus.OK, Map.of("citas", citas));
-            }
-            return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron citas"));
-        } catch (java.sql.SQLException e) {
-            System.out.println("error citas-CitaController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener las citas"));
-        }
+    public ResponseEntity<ApiResponse<?>> citas() {
+        List<Cita> citas = citaService.obtenerTodasLasCitas();
+
+        ApiResponse<?> response = ApiResponse.success("Citas obtenidas exitosamente", citas);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/papelera")
-    public List<Cita> obtenerPapeleraCitas() {
-        try {
-            return citaDAO.obtenerPapeleraCita();
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-            return java.util.Collections.emptyList();
-        }
+    public ResponseEntity<ApiResponse<?>> obtenerPapeleraCitas() {
+        List<Cita> citas = citaService.obtenerPapeleraCitas();
+
+        ApiResponse<?> response = ApiResponse.success("Citas de papelera obtenidas", citas);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cita> obtenerPorId(@PathVariable int id) {
-        try {
-            Cita cita = citaDAO.obtenerPorId(id);
-            return ResponseEntity.ok(cita);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ApiResponse<?>> obtenerPorId(@PathVariable int id) {
+        Cita cita = citaService.obtenerPorId(id);
+
+        ApiResponse<?> response = ApiResponse.success("Cita obtenida exitosamente", cita);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<?> actualizarCita(@RequestBody Cita cita) {
-        try {
-            int filas = citaDAO.actualizar(cita);
-            if (filas > 0) {
-                return ResponseHttp(HttpStatus.OK, Map.of("mensaje", "Cita actualizada correctamente","respuesta", true));
-            } else {
-                return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo actualizar la cita","respuesta", false));
-            }
-        } catch (Exception e) {
-            System.out.println("error actualizarCita-CitaController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al actualizar la cita","respuesta", false));
-        }
+    public ResponseEntity<ApiResponse<?>> actualizarCita(@RequestBody Cita cita) {
+        Cita citaActualizada = citaService.actualizarCita(cita);
+
+        ApiResponse<?> response = ApiResponse.success("Cita actualizada correctamente", citaActualizada);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<?> eliminarCita(@PathVariable int id) {
-        try {
-            int filas = citaDAO.eliminar(id);
-            if (filas > 0) {
-                return ResponseHttp(HttpStatus.OK, Map.of("mensaje", "Cita eliminada correctamente","respuesta", true));
-            } else {
-                return ResponseHttp(HttpStatus.BAD_REQUEST, Map.of("mensaje", "No se pudo eliminar la cita","respuesta", false));
-            }
-        } catch (Exception e) {
-            System.out.println("error eliminarCita-CitaController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al eliminar la cita","respuesta", false));
-        }
+    public ResponseEntity<ApiResponse<?>> eliminarCita(@PathVariable int id) {
+        citaService.eliminarCita(id);
+
+        ApiResponse<?> response = ApiResponse.success("Cita eliminada correctamente", null);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/con-usuario")
-    public ResponseEntity<?> obtenerCitasConUsuario() {
-        try {
-            List<CitaUsuarioDTO> citas = citaDAO.obtenerUsuarioCita();
-            if (!citas.isEmpty()) {
-                return ResponseHttp(HttpStatus.OK, Map.of("citas", citas));
-            } else {
-                return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron citas con usuarios", "respuesta", false));
-            }
-        } catch (Exception e) {
-            System.out.println("error obtenerCitasConUsuario-CitaController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener las citas con usuarios", "respuesta", false));
-        }
+    public ResponseEntity<ApiResponse<?>> obtenerCitasConUsuario() {
+        List<CitaUsuarioDTO> citas = citaService.obtenerCitasConUsuario();
+
+        ApiResponse<?> response = ApiResponse.success("Citas con usuario obtenidas", citas);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/get-cita-usuario/{cedula}")
-    public ResponseEntity<?> obtenerCitaPorUsuario(@PathVariable String cedula) {
-        try {
-            List<Cita> citas = citaDAO.obtenerCitaPorUsuario(cedula);
-            if(!citas.isEmpty()){
-                
-                return ResponseHttp(HttpStatus.OK, Map.of("citas", citas));
-            }else{
-                return ResponseHttp(HttpStatus.NOT_FOUND, Map.of("mensaje", "No se encontraron citas"));
-            }
-        } catch (Exception e) {
-            System.out.println("error obtenerCitaPorUsuario-CitaController" + e);
-            return ResponseHttp(HttpStatus.INTERNAL_SERVER_ERROR, Map.of("mensaje", "Error al obtener las citas"));
-        }
+    public ResponseEntity<ApiResponse<?>> obtenerCitaPorUsuario(@PathVariable String cedula) {
+        List<Cita> citas = citaService.obtenerCitasPorUsuario(cedula);
+
+        ApiResponse<?> response = ApiResponse.success("Citas del usuario obtenidas", citas);
+        return ResponseEntity.ok(response);
     }
 }

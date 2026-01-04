@@ -1,33 +1,55 @@
 package com.leocarlos10.backendSG_medica.Controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.leocarlos10.backendSG_medica.service.UsuarioService;
-import com.leocarlos10.backendSG_medica.conexionDAO.CitaDAO;
-import com.leocarlos10.backendSG_medica.conexionDAO.HistoriaClinicaDAO;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-import java.util.Map;
+import com.leocarlos10.backendSG_medica.service.CitaService;
+import com.leocarlos10.backendSG_medica.service.DiagnosticoService;
+import com.leocarlos10.backendSG_medica.service.HistoriaClinicaService;
+import com.leocarlos10.backendSG_medica.service.PacienteService;
+import com.leocarlos10.backendSG_medica.service.PanelService;
 import com.leocarlos10.backendSG_medica.jwt.JWTUtil;
-
+import com.leocarlos10.backendSG_medica.exception.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Controller {
 
+    protected static final Logger logger = LoggerFactory.getLogger(Controller.class);
+
     @Autowired
     protected UsuarioService usuarioService;
+
     @Autowired
-    protected CitaDAO citaDAO;
+    protected CitaService citaService;
+
     @Autowired
-    protected HistoriaClinicaDAO historiaCli_Controller;
+    protected DiagnosticoService diagnosticoService;
+
+    @Autowired
+    protected HistoriaClinicaService historiaClinicaService;
+
+    @Autowired
+    protected PacienteService pacienteService;
+
+    @Autowired
+    protected PanelService panelService;
+
     @Autowired
     protected JWTUtil jwt;
-    
-    protected ResponseEntity<?> ResponseHttp(HttpStatus httpStatus, Map<?,?> respuesta  ){
-        return ResponseEntity.status(httpStatus).body(respuesta);
-    }
-    
-   
 
+    /**
+     * Valida el token JWT proporcionado
+     * 
+     * @param token: Token JWT con prefijo "Bearer "
+     * @throws UnauthorizedException: Si el token es inválido
+     */
+    protected void validarToken(String token) {
+        if (token == null || token.isEmpty()) {
+            throw new UnauthorizedException("Token no proporcionado");
+        }
+
+        if (!jwt.validarToken(token)) {
+            throw new UnauthorizedException("Token inválido o expirado");
+        }
+    }
 }

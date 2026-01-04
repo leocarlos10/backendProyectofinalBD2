@@ -1,7 +1,7 @@
 package com.leocarlos10.backendSG_medica.Models;
 
 import lombok.Data;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Data
 public class CrearDiagnosticoDTO {
@@ -10,5 +10,5 @@ public class CrearDiagnosticoDTO {
     private String observaciones;
     private String notaCorta;
     private String notaLarga;
-    private Date fecha;
+    private LocalDate fecha;
 }
