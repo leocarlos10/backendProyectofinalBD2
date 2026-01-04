@@ -7,10 +7,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
 import com.leocarlos10.backendSG_medica.Models.HistoriaClinica;
 import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import com.leocarlos10.backendSG_medica.service.HistoriaClinicaService;
+
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/historia-cli")
-public class HistoriaCli_Controller extends Controller {
+@RequiredArgsConstructor
+public class HistoriaCli_Controller extends Controller  {
+
+
+    private final HistoriaClinicaService historiaClinicaService;
 
     @GetMapping("/obtener-historia-cli/{cedula}")
     public ResponseEntity<ApiResponse<?>> obtenerHistoriaCli(@PathVariable String cedula) {

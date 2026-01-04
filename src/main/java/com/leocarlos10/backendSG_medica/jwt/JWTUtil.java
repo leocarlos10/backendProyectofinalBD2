@@ -12,6 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
+import com.leocarlos10.backendSG_medica.exception.UnauthorizedException;
 
 /* dependencia adicional para la clase import javax.xml.bind.DatatypeConverter;
 * <dependency>
@@ -26,9 +27,11 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
-    /* Estas variables las esta cargando desde los datos que
-    * agregamos en el aplicattion properties con  la ayuda de
-    * la anotacion value.*/
+    /*
+     * Estas variables las esta cargando desde los datos que
+     * agregamos en el aplicattion properties con la ayuda de
+     * la anotacion value.
+     */
     @Value("${security.jwt.secret}")
     private String key;
 
@@ -56,11 +59,11 @@ public class JWTUtil {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
 
-        //  sign JWT with our ApiKey secret
+        // sign JWT with our ApiKey secret
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(key);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
-        //  set the JWT Claims
+        // set the JWT Claims
         JwtBuilder builder = Jwts.builder().setId(id).setIssuedAt(now).setSubject(subject).setIssuer(issuer)
                 .signWith(signatureAlgorithm, signingKey);
 
@@ -105,22 +108,28 @@ public class JWTUtil {
     }
 
     /**
-     * @descripcion: Valida si el token es valido, hace uso de substring(7)
-     * para quitar el prefijo "Bearer " si existe.
-     * @param token: Token a validar
-     * @return true si el token es valido, false en caso contrario
+     * Valida el token JWT proporcionado
+     * 
+     * @param token: Token JWT con prefijo "Bearer "
+     * @throws UnauthorizedException: Si el token es inválido
      */
+    public void validarToken(String token) {
+        if (token == null || token.isEmpty()) {
+            throw new UnauthorizedException("Token no proporcionado");
+        }
 
-    public boolean validarToken(String token){
         try {
             // Remover el prefijo "Bearer " si existe
-            if (token != null && token.startsWith("Bearer ")) {
-                token = token.substring(7);
+            String tokenLimpio = token.startsWith("Bearer ") ? token.substring(7) : token;
+
+            String idusuario = getKey(tokenLimpio);
+            if (idusuario == null) {
+                throw new UnauthorizedException("Token inválido");
             }
-            String idusuario = getKey(token);
-            return idusuario != null;
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
-            return false;
+            throw new UnauthorizedException("Token inválido o expirado");
         }
     }
 }

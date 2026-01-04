@@ -1,23 +1,21 @@
 package com.leocarlos10.backendSG_medica.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.leocarlos10.backendSG_medica.Models.CitasPanel;
 import com.leocarlos10.backendSG_medica.Models.DiagnosticoPanel;
 import com.leocarlos10.backendSG_medica.conexionDAO.PanelDAO;
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
+
+import lombok.RequiredArgsConstructor;
+
 import com.leocarlos10.backendSG_medica.exception.BusinessException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @Service
-public class PanelService {
+@RequiredArgsConstructor
+public class PanelService extends service {
 
-    private static final Logger logger = LoggerFactory.getLogger(PanelService.class);
-
-    @Autowired
-    private PanelDAO panelDAO;
+    private final PanelDAO panelDAO;
 
     /**
      * Obtiene las citas próximas

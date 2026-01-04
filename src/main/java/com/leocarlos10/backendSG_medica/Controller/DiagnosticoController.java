@@ -4,6 +4,8 @@ import com.leocarlos10.backendSG_medica.Models.CrearDiagnosticoDTO;
 import com.leocarlos10.backendSG_medica.Models.Diagnostico;
 import com.leocarlos10.backendSG_medica.Models.UsuarioDiagnosticoDTO;
 import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import com.leocarlos10.backendSG_medica.service.DiagnosticoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/diagnostico")
-public class DiagnosticoController extends Controller {
+@RequiredArgsConstructor
+public class DiagnosticoController extends Controller  {
+
+    protected final DiagnosticoService diagnosticoService;
+   
 
     @GetMapping("/con-usuario")
     public ResponseEntity<ApiResponse<?>> obtenerDiagnosticosConUsuario() {

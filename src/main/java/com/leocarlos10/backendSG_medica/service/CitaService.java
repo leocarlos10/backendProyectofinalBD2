@@ -1,24 +1,23 @@
 package com.leocarlos10.backendSG_medica.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.transaction.annotation.Transactional;
 import com.leocarlos10.backendSG_medica.Models.Cita;
 import com.leocarlos10.backendSG_medica.Models.CitaUsuarioDTO;
 import com.leocarlos10.backendSG_medica.conexionDAO.CitaDAO;
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
 import com.leocarlos10.backendSG_medica.exception.ValidationException;
+
+import lombok.RequiredArgsConstructor;
+
 import com.leocarlos10.backendSG_medica.exception.BusinessException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @Service
-public class CitaService {
+@RequiredArgsConstructor
+public class CitaService extends service {
 
-    private static final Logger logger = LoggerFactory.getLogger(CitaService.class);
-
-    @Autowired
     private CitaDAO citaDAO;
 
     /**

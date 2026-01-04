@@ -8,10 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import com.leocarlos10.backendSG_medica.service.PanelService;
+
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/panel")
-public class PanelController extends Controller {
+@RequiredArgsConstructor
+public class PanelController extends Controller  {
+    
+    private final PanelService panelService;
+   
 
     @GetMapping("/citas-proximas")
     public ResponseEntity<ApiResponse<?>> obtenerCitasProximas() {

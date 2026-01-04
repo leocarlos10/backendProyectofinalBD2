@@ -1,21 +1,20 @@
 package com.leocarlos10.backendSG_medica.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.leocarlos10.backendSG_medica.Models.HistoriaClinica;
 import com.leocarlos10.backendSG_medica.conexionDAO.HistoriaClinicaDAO;
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
 import com.leocarlos10.backendSG_medica.exception.ValidationException;
+
+import lombok.RequiredArgsConstructor;
+
 import com.leocarlos10.backendSG_medica.exception.BusinessException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
-public class HistoriaClinicaService {
+@RequiredArgsConstructor
+public class HistoriaClinicaService extends service {
 
-    private static final Logger logger = LoggerFactory.getLogger(HistoriaClinicaService.class);
-
-    @Autowired
+    
     private HistoriaClinicaDAO historiaClinicaDAO;
 
     /**

@@ -14,16 +14,24 @@ import org.springframework.http.HttpStatus;
 import com.leocarlos10.backendSG_medica.Models.Cita;
 import com.leocarlos10.backendSG_medica.Models.CitaUsuarioDTO;
 import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import com.leocarlos10.backendSG_medica.jwt.JWTUtil;
+import com.leocarlos10.backendSG_medica.service.CitaService;
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/citas")
-public class CitaController extends Controller {
+@RequiredArgsConstructor
+public class CitaController extends Controller  {
+
+    private final CitaService citaService;
+    private final JWTUtil jwt;
 
     @PostMapping("/registrar")
     public ResponseEntity<ApiResponse<?>> registrarCita(@RequestBody Cita cita,
             @RequestHeader(value = "Authorization") String token) {
-        validarToken(token);
+        jwt.validarToken(token);
 
         Cita citaRegistrada = citaService.registrarCita(cita);
 

@@ -1,23 +1,16 @@
 package com.leocarlos10.backendSG_medica.service;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.leocarlos10.backendSG_medica.conexionDAO.DAO;
-import com.leocarlos10.backendSG_medica.jwt.JWTUtil;
-import com.leocarlos10.backendSG_medica.Models.Usuario;
 import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
-@Service
-public class service {
 
-    @Autowired
-    protected DAO<Usuario,String> usuarioDAO;
-    @Autowired
-    protected JWTUtil jwt; 
+public abstract class service {
+
+     protected static final Logger logger = LoggerFactory.getLogger(service.class);
 
     Map<String, List<?>> responseList;
     Map<String, String> response;

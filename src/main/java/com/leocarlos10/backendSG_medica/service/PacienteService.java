@@ -1,25 +1,24 @@
 package com.leocarlos10.backendSG_medica.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.leocarlos10.backendSG_medica.Models.Paciente;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
 import com.leocarlos10.backendSG_medica.conexionDAO.UsuarioDAO;
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
 import com.leocarlos10.backendSG_medica.exception.ValidationException;
+
+import lombok.RequiredArgsConstructor;
+
 import com.leocarlos10.backendSG_medica.exception.BusinessException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 @Service
-public class PacienteService {
+@RequiredArgsConstructor
+public class PacienteService extends service{
 
-    private static final Logger logger = LoggerFactory.getLogger(PacienteService.class);
-
-    @Autowired
-    private UsuarioDAO usuarioDAO;
-
+    
+    private final UsuarioDAO usuarioDAO;
     /**
      * Obtiene pacientes con su última cita
      * 

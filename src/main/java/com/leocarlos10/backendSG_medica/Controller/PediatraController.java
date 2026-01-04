@@ -9,15 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.leocarlos10.backendSG_medica.Models.Pediatra;
 import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+
+import lombok.RequiredArgsConstructor;
+
 import com.leocarlos10.backendSG_medica.conexionDAO.PediatraDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/pediatra")
-public class PediatraController extends Controller {
+@RequiredArgsConstructor
+public class PediatraController extends Controller  {
 
-    @Autowired
-    private PediatraDAO pediatraDAO;
+    private final PediatraDAO pediatraDAO;
 
     /**
      * Login de pediatra - Se mantiene con DAO directo temporalmente

@@ -6,13 +6,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.leocarlos10.backendSG_medica.Models.Paciente;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
 import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import com.leocarlos10.backendSG_medica.service.PacienteService;
+
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/pacientes")
-public class PacientesController extends Controller {
+@RequiredArgsConstructor
+public class PacientesController extends Controller  {
+
+    private final PacienteService pacienteService;
 
     @GetMapping("/ultima-cita")
     public ResponseEntity<ApiResponse<?>> obtenerPacientesConUltimaCita() {

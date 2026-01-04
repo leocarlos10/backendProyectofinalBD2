@@ -1,24 +1,22 @@
 package com.leocarlos10.backendSG_medica.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.leocarlos10.backendSG_medica.Models.Diagnostico;
 import com.leocarlos10.backendSG_medica.Models.UsuarioDiagnosticoDTO;
 import com.leocarlos10.backendSG_medica.conexionDAO.DiagnosticoDAO;
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
 import com.leocarlos10.backendSG_medica.exception.ValidationException;
+
+import lombok.RequiredArgsConstructor;
+
 import com.leocarlos10.backendSG_medica.exception.BusinessException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @Service
-public class DiagnosticoService {
+@RequiredArgsConstructor
+public class DiagnosticoService extends service {
 
-    private static final Logger logger = LoggerFactory.getLogger(DiagnosticoService.class);
-
-    @Autowired
     private DiagnosticoDAO diagnosticoDAO;
 
     /**

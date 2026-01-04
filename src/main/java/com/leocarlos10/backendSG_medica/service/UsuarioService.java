@@ -1,28 +1,25 @@
 package com.leocarlos10.backendSG_medica.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
 import com.leocarlos10.backendSG_medica.conexionDAO.UsuarioDAO;
 import com.leocarlos10.backendSG_medica.jwt.JWTUtil;
+
+import lombok.RequiredArgsConstructor;
+
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
 import com.leocarlos10.backendSG_medica.exception.ValidationException;
 import com.leocarlos10.backendSG_medica.exception.BusinessException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class UsuarioService {
+@RequiredArgsConstructor
+public class UsuarioService extends service {
 
-    private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
+    private final UsuarioDAO usuarioDAO;
 
-    @Autowired
-    private UsuarioDAO usuarioDAO;
-
-    @Autowired
-    private JWTUtil jwt;
+    private final JWTUtil jwt;
 
     /**
      * Registra un nuevo usuario en la base de datos

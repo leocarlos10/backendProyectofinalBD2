@@ -8,11 +8,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
 import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import com.leocarlos10.backendSG_medica.service.UsuarioService;
+
+import lombok.RequiredArgsConstructor;
+
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@RequiredArgsConstructor
 public class UsuariosController extends Controller {
+
+    private final UsuarioService usuarioService;
 
     /**
      * Registra un nuevo usuario
