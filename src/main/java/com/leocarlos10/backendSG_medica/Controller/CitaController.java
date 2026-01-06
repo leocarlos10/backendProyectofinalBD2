@@ -81,24 +81,25 @@ public class CitaController extends Controller {
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<Response<Cita>> actualizarCita(@Valid @RequestBody Cita cita) {
-        Cita citaActualizada = citaService.actualizarCita(cita);
+    public ResponseEntity<Response<Boolean>> actualizarCita(@Valid @RequestBody Cita cita) {
+        boolean estado = citaService.actualizarCita(cita);
 
-        Response<Cita> response = Response.<Cita>builder()
+        Response<Boolean> response = Response.<Boolean>builder()
                 .responseCode(200)
                 .responseMessage("Cita actualizada correctamente")
-                .data(citaActualizada)
+                .data(estado)
                 .build();
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Response<Void>> eliminarCita(@PathVariable int id) {
-        citaService.eliminarCita(id);
+    public ResponseEntity<Response<Boolean>> eliminarCita(@PathVariable int id) {
+       boolean estado = citaService.eliminarCita(id);
 
-        Response<Void> response = Response.<Void>builder()
+        Response<Boolean> response = Response.<Boolean>builder()
                 .responseCode(200)
                 .responseMessage("Cita eliminada correctamente")
+                .data(estado)
                 .build();
         return ResponseEntity.ok(response);
     }

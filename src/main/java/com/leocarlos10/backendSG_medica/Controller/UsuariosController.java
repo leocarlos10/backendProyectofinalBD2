@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
-import com.leocarlos10.backendSG_medica.dto.respuestasComunes.ApiResponse;
 import com.leocarlos10.backendSG_medica.dto.respuestasComunes.Response;
 import com.leocarlos10.backendSG_medica.dto.usuario.LoginRequest;
 import com.leocarlos10.backendSG_medica.dto.usuario.LoginResponse;
@@ -15,8 +14,6 @@ import com.leocarlos10.backendSG_medica.service.UsuarioService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -29,14 +26,18 @@ public class UsuariosController extends Controller {
      * Registra un nuevo usuario
      * 
      * @param usuario: Datos del usuario a registrar
-     * @return: ResponseEntity con ApiResponse
+     * @return: ResponseEntity con Response
      */
     @PostMapping("/registrar")
-    public ResponseEntity<ApiResponse<?>> registrarUsuario(@Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<Response<Usuario>> registrarUsuario(@Valid @RequestBody Usuario usuario) {
 
         Usuario usuarioRegistrado = usuarioService.registrarUsuario(usuario);
 
-        ApiResponse<Usuario> response = ApiResponse.success("Usuario registrado exitosamente", usuarioRegistrado);
+        Response<Usuario> response = Response.<Usuario>builder()
+                .responseCode(201)
+                .responseMessage("Usuario registrado exitosamente")
+                .data(usuarioRegistrado)
+                .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

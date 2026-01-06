@@ -3,7 +3,6 @@ package com.leocarlos10.backendSG_medica.service;
 import org.springframework.stereotype.Service;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
 import com.leocarlos10.backendSG_medica.conexionDAO.UsuarioDAO;
-import com.leocarlos10.backendSG_medica.dto.respuestasComunes.Response;
 import com.leocarlos10.backendSG_medica.dto.usuario.LoginRequest;
 import com.leocarlos10.backendSG_medica.dto.usuario.LoginResponse;
 import com.leocarlos10.backendSG_medica.jwt.JWTUtil;

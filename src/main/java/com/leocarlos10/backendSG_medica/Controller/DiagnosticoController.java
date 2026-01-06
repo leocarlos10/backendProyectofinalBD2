@@ -98,28 +98,29 @@ public class DiagnosticoController extends Controller {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Response<Void>> eliminar(@PathVariable Integer id) {
-        diagnosticoService.eliminarDiagnostico(id);
-        Response<Void> response = Response.<Void>builder()
+    public ResponseEntity<Response<Boolean>> eliminar(@PathVariable Integer id) {
+        boolean estado = diagnosticoService.eliminarDiagnostico(id);
+        Response<Boolean> response = Response.<Boolean>builder()
                 .responseCode(200)
                 .responseMessage("Diagnóstico eliminado correctamente")
+                .data(estado)
                 .build();
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/crear-con-historia")
-    public ResponseEntity<Response<Integer>> crearDiagnosticoConHistoria(@Valid @RequestBody CrearDiagnosticoDTO dto) {
-        int resultado = diagnosticoService.crearDiagnosticoConHistoria(
+    public ResponseEntity<Response<Boolean>> crearDiagnosticoConHistoria(@Valid @RequestBody CrearDiagnosticoDTO dto) {
+        boolean estado = diagnosticoService.crearDiagnosticoConHistoria(
                 dto.getCedulaUsuario(),
                 dto.getTratamiento(),
                 dto.getObservaciones(),
                 dto.getNotaCorta(),
                 dto.getNotaLarga(),
                 dto.getFecha());
-        Response<Integer> response = Response.<Integer>builder()
+        Response<Boolean> response = Response.<Boolean>builder()
                 .responseCode(201)
                 .responseMessage("Diagnóstico con historia creado correctamente")
-                .data(resultado)
+                .data(estado)
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

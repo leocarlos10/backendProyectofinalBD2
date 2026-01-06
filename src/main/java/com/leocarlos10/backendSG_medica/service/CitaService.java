@@ -154,7 +154,7 @@ public class CitaService extends service {
      * @return: La cita actualizada
      */
     @Transactional
-    public Cita actualizarCita(Cita cita) {
+    public boolean actualizarCita(Cita cita) {
         logger.info("Actualizando cita con ID: {}", cita.getId_cita());
 
         if (cita == null || cita.getId_cita() <= 0) {
@@ -165,7 +165,7 @@ public class CitaService extends service {
             int filas = citaDAO.actualizar(cita);
             if (filas > 0) {
                 logger.info("Cita actualizada exitosamente");
-                return cita;
+                return true;
             } else {
                 throw new BusinessException("CITA_NO_ACTUALIZADA", "No se pudo actualizar la cita");
             }
@@ -181,7 +181,7 @@ public class CitaService extends service {
      * @param id: ID de la cita a eliminar
      */
     @Transactional
-    public void eliminarCita(Integer id) {
+    public boolean eliminarCita(Integer id) {
         logger.info("Eliminando cita con ID: {}", id);
 
         if (id == null || id <= 0) {
@@ -192,6 +192,7 @@ public class CitaService extends service {
             int filas = citaDAO.eliminar(id);
             if (filas > 0) {
                 logger.info("Cita eliminada exitosamente");
+                return true;
             } else {
                 throw new BusinessException("CITA_NO_ELIMINADA", "No se pudo eliminar la cita");
             }

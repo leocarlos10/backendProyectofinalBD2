@@ -194,7 +194,7 @@ public class DiagnosticoService extends service {
      * @param id: ID del diagnóstico a eliminar
      */
     @Transactional
-    public void eliminarDiagnostico(Integer id) {
+    public boolean eliminarDiagnostico(Integer id) {
         logger.info("Eliminando diagnóstico con ID: {}", id);
 
         if (id == null || id <= 0) {
@@ -205,6 +205,7 @@ public class DiagnosticoService extends service {
             int resultado = diagnosticoDAO.eliminar(id);
             if (resultado > 0) {
                 logger.info("Diagnóstico eliminado exitosamente");
+                return true;
             } else {
                 throw new BusinessException("DIAGNOSTICO_NO_ELIMINADO", "No se pudo eliminar el diagnóstico");
             }
@@ -226,7 +227,7 @@ public class DiagnosticoService extends service {
      * @return: Resultado de la operación
      */
     @Transactional
-    public int crearDiagnosticoConHistoria(String cedulaUsuario, String tratamiento, String observaciones,
+    public boolean crearDiagnosticoConHistoria(String cedulaUsuario, String tratamiento, String observaciones,
             String notaCorta, String notaLarga, java.time.LocalDate fecha) {
         logger.info("Creando diagnóstico con historia para usuario: {}", cedulaUsuario);
 
@@ -240,7 +241,7 @@ public class DiagnosticoService extends service {
                     notaCorta, notaLarga, sqlDate);
             if (resultado > 0) {
                 logger.info("Diagnóstico con historia creado exitosamente");
-                return resultado;
+                return true;
             } else {
                 throw new BusinessException("DIAGNOSTICO_NO_CREADO", "No se pudo crear el diagnóstico con historia");
             }
