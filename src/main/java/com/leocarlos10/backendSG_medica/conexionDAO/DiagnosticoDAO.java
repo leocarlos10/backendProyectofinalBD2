@@ -2,7 +2,7 @@ package com.leocarlos10.backendSG_medica.conexionDAO;
 
 import com.leocarlos10.backendSG_medica.Models.Diagnostico;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
-import com.leocarlos10.backendSG_medica.Models.UsuarioDiagnosticoDTO;
+import com.leocarlos10.backendSG_medica.dto.usuario.UsuarioDiagnosticoDTO;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;

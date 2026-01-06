@@ -1,8 +1,8 @@
 package com.leocarlos10.backendSG_medica.conexionDAO;
 
 import com.leocarlos10.backendSG_medica.Models.Cita;
-import com.leocarlos10.backendSG_medica.Models.CitaUsuarioDTO;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
+import com.leocarlos10.backendSG_medica.dto.cita.CitaUsuarioDTO;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;

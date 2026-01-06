@@ -7,9 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
-import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import com.leocarlos10.backendSG_medica.dto.respuestasComunes.ApiResponse;
+import com.leocarlos10.backendSG_medica.dto.respuestasComunes.Response;
+import com.leocarlos10.backendSG_medica.dto.usuario.LoginRequest;
+import com.leocarlos10.backendSG_medica.dto.usuario.LoginResponse;
 import com.leocarlos10.backendSG_medica.service.UsuarioService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
@@ -28,12 +32,11 @@ public class UsuariosController extends Controller {
      * @return: ResponseEntity con ApiResponse
      */
     @PostMapping("/registrar")
-    public ResponseEntity<ApiResponse<?>> registrarUsuario(@RequestBody Usuario usuario) {
-        logger.info("Registrando nuevo usuario con cédula: {}", usuario.getCedula());
+    public ResponseEntity<ApiResponse<?>> registrarUsuario(@Valid @RequestBody Usuario usuario) {
 
         Usuario usuarioRegistrado = usuarioService.registrarUsuario(usuario);
 
-        ApiResponse<?> response = ApiResponse.success("Usuario registrado exitosamente", usuarioRegistrado);
+        ApiResponse<Usuario> response = ApiResponse.success("Usuario registrado exitosamente", usuarioRegistrado);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -44,12 +47,13 @@ public class UsuariosController extends Controller {
      * @return: ResponseEntity con ApiResponse conteniendo token
      */
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<?>> loginUsuario(@RequestBody Usuario usuario) {
-        logger.info("Login para usuario: {}", usuario.getCedula());
-
-        Map<String, String> resultado = usuarioService.loginUsuario(usuario);
-
-        ApiResponse<?> response = ApiResponse.success("Login exitoso", resultado);
+    public ResponseEntity<Response<LoginResponse>> loginUsuario(@Valid @RequestBody LoginRequest request) {
+        LoginResponse loginResponse = usuarioService.loginUsuario(request);
+        Response<LoginResponse> response = Response.<LoginResponse>builder()
+                .responseCode(200)
+                .responseMessage("Login exitoso")
+                .data(loginResponse)
+                .build();
         return ResponseEntity.ok(response);
     }
 }

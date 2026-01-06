@@ -8,11 +8,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component; 
-import com.leocarlos10.backendSG_medica.Models.CitasPanel;
+import org.springframework.stereotype.Component;
+
 import com.leocarlos10.backendSG_medica.Models.Diagnostico;
-import com.leocarlos10.backendSG_medica.Models.DiagnosticoPanel;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
+import com.leocarlos10.backendSG_medica.dto.panel.CitasPanel;
+import com.leocarlos10.backendSG_medica.dto.panel.DiagnosticoPanel;
 
 @Component
 public class PanelDAO {

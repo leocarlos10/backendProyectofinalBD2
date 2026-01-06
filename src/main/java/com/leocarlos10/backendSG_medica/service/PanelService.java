@@ -1,9 +1,10 @@
 package com.leocarlos10.backendSG_medica.service;
 
 import org.springframework.stereotype.Service;
-import com.leocarlos10.backendSG_medica.Models.CitasPanel;
-import com.leocarlos10.backendSG_medica.Models.DiagnosticoPanel;
+
 import com.leocarlos10.backendSG_medica.conexionDAO.PanelDAO;
+import com.leocarlos10.backendSG_medica.dto.panel.CitasPanel;
+import com.leocarlos10.backendSG_medica.dto.panel.DiagnosticoPanel;
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;

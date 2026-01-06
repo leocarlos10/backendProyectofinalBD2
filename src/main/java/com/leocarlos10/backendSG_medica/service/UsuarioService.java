@@ -3,6 +3,9 @@ package com.leocarlos10.backendSG_medica.service;
 import org.springframework.stereotype.Service;
 import com.leocarlos10.backendSG_medica.Models.Usuario;
 import com.leocarlos10.backendSG_medica.conexionDAO.UsuarioDAO;
+import com.leocarlos10.backendSG_medica.dto.respuestasComunes.Response;
+import com.leocarlos10.backendSG_medica.dto.usuario.LoginRequest;
+import com.leocarlos10.backendSG_medica.dto.usuario.LoginResponse;
 import com.leocarlos10.backendSG_medica.jwt.JWTUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -10,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
 import com.leocarlos10.backendSG_medica.exception.ValidationException;
 import com.leocarlos10.backendSG_medica.exception.BusinessException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -28,15 +29,6 @@ public class UsuarioService extends service {
      * @return: El usuario registrado
      */
     public Usuario registrarUsuario(Usuario usuario) {
-        logger.info("Registrando nuevo usuario con cédula: {}", usuario.getCedula());
-
-        if (usuario == null || usuario.getCedula() == null || usuario.getCedula().isEmpty()) {
-            throw new ValidationException("La cédula del usuario es requerida");
-        }
-
-        if (usuario.getNombre() == null || usuario.getNombre().isEmpty()) {
-            throw new ValidationException("El nombre del usuario es requerido");
-        }
 
         try {
             int resultado = usuarioDAO.registrar(usuario);
@@ -55,41 +47,35 @@ public class UsuarioService extends service {
     /**
      * Realiza el login de un usuario
      * 
-     * @param usuario: Usuario con cédula y contraseña
-     * @return: Map con token, nombre y cédula del usuario
+     * @param request: Datos del login de tipo LoginRequest
+     * @return: un objeto Response con toda la informacion del LoginResponse.
      */
-    public Map<String, String> loginUsuario(Usuario usuario) {
-        logger.info("Intento de login para usuario: {}", usuario.getCedula());
+    public LoginResponse loginUsuario(LoginRequest request) {
 
-        if (usuario == null || usuario.getCedula() == null || usuario.getCedula().isEmpty()) {
-            throw new ValidationException("La cédula es requerida para el login");
-        }
-
-        if (usuario.getPass() == null || usuario.getPass().isEmpty()) {
-            throw new ValidationException("La contraseña es requerida para el login");
-        }
+        logger.info("Intento de login para usuario: {}", request.getCedula());
 
         try {
-            Usuario user = usuarioDAO.obtenerPorId(usuario.getCedula());
+            Usuario user = usuarioDAO.obtenerPorId(request.getCedula());
 
             if (user == null) {
-                logger.warn("Usuario no encontrado: {}", usuario.getCedula());
-                throw new EntityNotFoundException("Usuario", usuario.getCedula());
+                logger.warn("Usuario no encontrado: {}", request.getCedula());
+                throw new EntityNotFoundException("Usuario", request.getCedula());
             }
 
-            if (!usuario.getPass().equals(user.getPass())) {
-                logger.warn("Contraseña incorrecta para usuario: {}", usuario.getCedula());
+            if (!request.getPass().equals(user.getPass())) {
+                logger.warn("Contraseña incorrecta para usuario: {}", request.getCedula());
                 throw new ValidationException("Contraseña incorrecta");
             }
 
-            String token = jwt.create(usuario.getCedula(), user.getNombre());
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);
-            response.put("nombre", user.getNombre());
-            response.put("cedula", user.getCedula());
+            String token = jwt.create(request.getCedula(), user.getNombre());
 
-            logger.info("Login exitoso para usuario: {}", usuario.getCedula());
-            return response;
+            LoginResponse loginResponse = LoginResponse.builder()
+                    .token(token)
+                    .nombre(user.getNombre())
+                    .cedula(user.getCedula())
+                    .build();
+
+            return loginResponse;
 
         } catch (EntityNotFoundException | ValidationException e) {
             throw e;
@@ -107,10 +93,6 @@ public class UsuarioService extends service {
      */
     public Usuario obtenerPorCedula(String cedula) {
         logger.info("Obteniendo usuario con cédula: {}", cedula);
-
-        if (cedula == null || cedula.isEmpty()) {
-            throw new ValidationException("La cédula es requerida");
-        }
 
         try {
             Usuario usuario = usuarioDAO.obtenerPorId(cedula);

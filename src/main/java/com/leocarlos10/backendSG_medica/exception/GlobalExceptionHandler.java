@@ -1,6 +1,5 @@
 package com.leocarlos10.backendSG_medica.exception;
 
-import com.leocarlos10.backendSG_medica.dto.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -8,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+
+import com.leocarlos10.backendSG_medica.dto.respuestasComunes.ApiResponse;
 
 import java.sql.SQLException;
 

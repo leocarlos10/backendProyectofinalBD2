@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import com.leocarlos10.backendSG_medica.Models.Cita;
-import com.leocarlos10.backendSG_medica.Models.CitaUsuarioDTO;
 import com.leocarlos10.backendSG_medica.conexionDAO.CitaDAO;
+import com.leocarlos10.backendSG_medica.dto.cita.CitaUsuarioDTO;
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
 import com.leocarlos10.backendSG_medica.exception.ValidationException;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CitaService extends service {
 
-    private CitaDAO citaDAO;
+    private final CitaDAO citaDAO;
 
     /**
      * Registra una nueva cita
@@ -29,10 +29,6 @@ public class CitaService extends service {
     @Transactional
     public Cita registrarCita(Cita cita) {
         logger.info("Registrando nueva cita para usuario: {}", cita.getCedula_usuario());
-
-        if (cita == null || cita.getCedula_usuario() == null) {
-            throw new ValidationException("La cédula del usuario es requerida");
-        }
 
         try {
             int filas = citaDAO.registrar(cita);
@@ -100,10 +96,6 @@ public class CitaService extends service {
      */
     public List<Cita> obtenerCitasPorUsuario(String cedula) {
         logger.info("Obteniendo citas para usuario: {}", cedula);
-
-        if (cedula == null || cedula.isEmpty()) {
-            throw new ValidationException("La cédula del usuario es requerida");
-        }
 
         try {
             List<Cita> citas = citaDAO.obtenerCitaPorUsuario(cedula);

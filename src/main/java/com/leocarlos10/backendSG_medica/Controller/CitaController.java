@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import com.leocarlos10.backendSG_medica.Models.Cita;
-import com.leocarlos10.backendSG_medica.Models.CitaUsuarioDTO;
-import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import com.leocarlos10.backendSG_medica.dto.cita.CitaUsuarioDTO;
+import com.leocarlos10.backendSG_medica.dto.respuestasComunes.Response;
 import com.leocarlos10.backendSG_medica.jwt.JWTUtil;
 import com.leocarlos10.backendSG_medica.service.CitaService;
 import lombok.RequiredArgsConstructor;
@@ -23,75 +24,106 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/citas")
 @RequiredArgsConstructor
-public class CitaController extends Controller  {
+public class CitaController extends Controller {
 
     private final CitaService citaService;
     private final JWTUtil jwt;
 
     @PostMapping("/registrar")
-    public ResponseEntity<ApiResponse<?>> registrarCita(@RequestBody Cita cita,
+    public ResponseEntity<Response<Cita>> registrarCita(@Valid @RequestBody Cita cita,
             @RequestHeader(value = "Authorization") String token) {
         jwt.validarToken(token);
 
         Cita citaRegistrada = citaService.registrarCita(cita);
 
-        ApiResponse<?> response = ApiResponse.success("Cita registrada correctamente", citaRegistrada);
+        Response<Cita> response = Response.<Cita>builder()
+                .responseCode(201)
+                .responseMessage("Cita registrada correctamente")
+                .data(citaRegistrada)
+                .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/obtener-todas")
-    public ResponseEntity<ApiResponse<?>> citas() {
+    public ResponseEntity<Response<List<Cita>>> citas() {
         List<Cita> citas = citaService.obtenerTodasLasCitas();
 
-        ApiResponse<?> response = ApiResponse.success("Citas obtenidas exitosamente", citas);
+        Response<List<Cita>> response = Response.<List<Cita>>builder()
+                .responseCode(200)
+                .responseMessage("Citas obtenidas exitosamente")
+                .data(citas)
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/papelera")
-    public ResponseEntity<ApiResponse<?>> obtenerPapeleraCitas() {
+    public ResponseEntity<Response<List<Cita>>> obtenerPapeleraCitas() {
         List<Cita> citas = citaService.obtenerPapeleraCitas();
 
-        ApiResponse<?> response = ApiResponse.success("Citas de papelera obtenidas", citas);
+        Response<List<Cita>> response = Response.<List<Cita>>builder()
+                .responseCode(200)
+                .responseMessage("Citas de papelera obtenidas")
+                .data(citas)
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> obtenerPorId(@PathVariable int id) {
+    public ResponseEntity<Response<Cita>> obtenerPorId(@PathVariable int id) {
         Cita cita = citaService.obtenerPorId(id);
 
-        ApiResponse<?> response = ApiResponse.success("Cita obtenida exitosamente", cita);
+        Response<Cita> response = Response.<Cita>builder()
+                .responseCode(200)
+                .responseMessage("Cita obtenida exitosamente")
+                .data(cita)
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<ApiResponse<?>> actualizarCita(@RequestBody Cita cita) {
+    public ResponseEntity<Response<Cita>> actualizarCita(@Valid @RequestBody Cita cita) {
         Cita citaActualizada = citaService.actualizarCita(cita);
 
-        ApiResponse<?> response = ApiResponse.success("Cita actualizada correctamente", citaActualizada);
+        Response<Cita> response = Response.<Cita>builder()
+                .responseCode(200)
+                .responseMessage("Cita actualizada correctamente")
+                .data(citaActualizada)
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<ApiResponse<?>> eliminarCita(@PathVariable int id) {
+    public ResponseEntity<Response<Void>> eliminarCita(@PathVariable int id) {
         citaService.eliminarCita(id);
 
-        ApiResponse<?> response = ApiResponse.success("Cita eliminada correctamente", null);
+        Response<Void> response = Response.<Void>builder()
+                .responseCode(200)
+                .responseMessage("Cita eliminada correctamente")
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/con-usuario")
-    public ResponseEntity<ApiResponse<?>> obtenerCitasConUsuario() {
+    public ResponseEntity<Response<List<CitaUsuarioDTO>>> obtenerCitasConUsuario() {
         List<CitaUsuarioDTO> citas = citaService.obtenerCitasConUsuario();
 
-        ApiResponse<?> response = ApiResponse.success("Citas con usuario obtenidas", citas);
+        Response<List<CitaUsuarioDTO>> response = Response.<List<CitaUsuarioDTO>>builder()
+                .responseCode(200)
+                .responseMessage("Citas con usuario obtenidas")
+                .data(citas)
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/get-cita-usuario/{cedula}")
-    public ResponseEntity<ApiResponse<?>> obtenerCitaPorUsuario(@PathVariable String cedula) {
+    public ResponseEntity<Response<List<Cita>>> obtenerCitaPorUsuario(@PathVariable String cedula) {
         List<Cita> citas = citaService.obtenerCitasPorUsuario(cedula);
 
-        ApiResponse<?> response = ApiResponse.success("Citas del usuario obtenidas", citas);
+        Response<List<Cita>> response = Response.<List<Cita>>builder()
+                .responseCode(200)
+                .responseMessage("Citas del usuario obtenidas")
+                .data(citas)
+                .build();
         return ResponseEntity.ok(response);
     }
 }

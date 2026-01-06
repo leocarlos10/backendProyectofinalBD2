@@ -1,4 +1,4 @@
-package com.leocarlos10.backendSG_medica.dto;
+package com.leocarlos10.backendSG_medica.dto.respuestasComunes;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;

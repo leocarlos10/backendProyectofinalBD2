@@ -1,4 +1,4 @@
-package com.leocarlos10.backendSG_medica.Models;
+package com.leocarlos10.backendSG_medica.dto.panel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

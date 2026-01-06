@@ -8,16 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.leocarlos10.backendSG_medica.Models.Pediatra;
-import com.leocarlos10.backendSG_medica.dto.ApiResponse;
+import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
 
 import com.leocarlos10.backendSG_medica.conexionDAO.PediatraDAO;
+import com.leocarlos10.backendSG_medica.dto.respuestasComunes.Response;
 
 @RestController
 @RequestMapping("/api/pediatra")
 @RequiredArgsConstructor
-public class PediatraController extends Controller  {
+public class PediatraController extends Controller {
 
     private final PediatraDAO pediatraDAO;
 
@@ -26,14 +27,18 @@ public class PediatraController extends Controller  {
      * Puede refactorizarse a un PediatraService en el futuro
      */
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<?>> login(@RequestBody Pediatra pediatra) {
+    public ResponseEntity<Response<Map<String, String>>> login(@Valid @RequestBody Pediatra pediatra) {
         try {
             Pediatra ped = pediatraDAO.obtenerPediatra(pediatra);
             if (ped != null) {
                 Map<String, String> data = new HashMap<>();
                 data.put("usuario", ped.getUsuario());
 
-                ApiResponse<?> response = ApiResponse.success("Login de pediatra exitoso", data);
+                Response<Map<String, String>> response = Response.<Map<String, String>>builder()
+                        .responseCode(200)
+                        .responseMessage("Login de pediatra exitoso")
+                        .data(data)
+                        .build();
                 return ResponseEntity.ok(response);
             } else {
                 throw new com.leocarlos10.backendSG_medica.exception.ValidationException(

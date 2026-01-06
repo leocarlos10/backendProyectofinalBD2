@@ -1,17 +1,14 @@
-package com.leocarlos10.backendSG_medica.Models;
+package com.leocarlos10.backendSG_medica.dto.diagnostico;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Diagnostico {
-    private Integer id_diagnostico;
+public class CrearDiagnosticoDTO {
+    @NotBlank(message = "La cédula del usuario es requerida")
+    private String cedulaUsuario;
 
     @NotBlank(message = "El tratamiento es requerido")
     private String tratamiento;
@@ -19,13 +16,10 @@ public class Diagnostico {
     private String observaciones;
 
     @NotBlank(message = "La nota corta es requerida")
-    private String nota_corta;
+    private String notaCorta;
 
-    private String nota_larga;
+    private String notaLarga;
 
     @NotNull(message = "La fecha es requerida")
     private LocalDate fecha;
-
-    @NotNull(message = "El ID de historia es requerido")
-    private Integer id_historia;
 }

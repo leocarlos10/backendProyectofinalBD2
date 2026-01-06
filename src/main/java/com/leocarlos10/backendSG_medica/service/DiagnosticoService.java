@@ -3,8 +3,8 @@ package com.leocarlos10.backendSG_medica.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.leocarlos10.backendSG_medica.Models.Diagnostico;
-import com.leocarlos10.backendSG_medica.Models.UsuarioDiagnosticoDTO;
 import com.leocarlos10.backendSG_medica.conexionDAO.DiagnosticoDAO;
+import com.leocarlos10.backendSG_medica.dto.usuario.UsuarioDiagnosticoDTO;
 import com.leocarlos10.backendSG_medica.exception.EntityNotFoundException;
 import com.leocarlos10.backendSG_medica.exception.ValidationException;
 
